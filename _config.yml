@@ -1,5 +1,9 @@
 theme: jekyll-theme-midnight
-title: "Leuck Family Reunion"
-description: "June 26 to July 1 2023"
-gitorg: "https://github.com/jm1021/leuck_reunion"
+title: "Reaction Time (CPT)"
+description: "TripleAJ Create Performance Task"
+gitorg: "https://github.com/Azeem-Khan1/TripleAJv3"
+description: "TripleAJ Create Performance Task"
 google_analytics:
+remote_theme: pages-themes/midnight@v0.2.0
+plugins:
+- jekyll-remote-theme # add this line to the plugins list if you already have one
