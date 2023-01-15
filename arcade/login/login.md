@@ -32,6 +32,8 @@
           outline: none;
         }
         button {
+          outline: none;
+          -webkit-tap-highlight-color: transparent;
           font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
           font-size: 20px;
           margin-top: 4%; 
