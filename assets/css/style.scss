@@ -3,6 +3,12 @@
 
 @import "{{ site.theme }}";
 
+
+::selection {
+  background: #f1cc0c;
+  color: #232322;
+}
+
 /* "row style" is flexible size and aligns pictures in center */
 .row {
     align-items: center;
