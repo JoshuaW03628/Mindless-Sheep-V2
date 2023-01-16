@@ -24,5 +24,5 @@
 
 ## Pictures (actual code and blog is on the link above)
 
-![Our Agile Manifesto](/images/input45.png)
-![Our Agile Manifesto](/images/output44.png)
+![code 1](/images/input45.png)
+![code 2](/images/output44.png)
