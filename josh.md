@@ -79,7 +79,6 @@ This is the current login for the website which is still a work in progress as b
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Login</title>
     <style>
         h1 {
           text-align: center;
@@ -160,11 +159,11 @@ This is the current login for the website which is still a work in progress as b
     <input type="password" class="login" id="pswd" placeholder="Password">
     <div>
     <br>
-      <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Enter</button>
+      <button id="enter" type="button">Enter</button>
       <div class="noacc">
        <p id="dontacc">Don't have an account?</p>
       </div>
-      <button id="signup" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/login/signup';">Sign up</button>
+      <button id="signup" type="button">Sign up</button>
     </div>
     
   </body>
@@ -187,9 +186,9 @@ This is the current login for the website which is still a work in progress as b
 
 # Logo
 
-As we are building an Arcade, their is a need for a team and brand logo. Me and Azeem were working in class to develop one and came up with this design;
+As we are building an Arcade, their is a need for a team and brand logo. Azeem and I were working in class to develop one and came up with this design;
 
-![code 1](/images/TripleAJArcade-highres.png)
+![TripleAJ Arcade Logo](/images/TripleAJArcade-highres.png)
 
 
 It is our team name along with what we tried to make look like a token to symbolize the currency needed to play games.
@@ -198,4 +197,4 @@ It is our team name along with what we tried to make look like a token to symbol
 
 # Submenu with access to Games.
 
-- Can be seen at the top of the screen.
+- Will be seen at the top of the screen.
