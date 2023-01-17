@@ -18,7 +18,7 @@
 <br>
 
 # LINK 
-[Full Blog for Backend Development regarding Triple AJ Arcade](https://akshat122805.github.io/fastpages/markdown/2023/01/15/lecture18.html)
+[Full Blog for Backend Development regarding Triple AJ Arcade](https://akshat122805.github.io/fastpages/markdown/2023/01/16/lecture18.html)
 
 > The blog discusses how the backend will work for each gamer and what data will be stored to create a token system and a leader board. 
 
