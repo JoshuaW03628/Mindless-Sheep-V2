@@ -78,10 +78,10 @@
     <h1 class="header">
       Sign Up
     </h1>
-    <input type="username" class="login" id="usrnm" placeholder="Username">
-    <input type="name" class="login" id="name" placeholder="Full Name">
-    <input type="password" class="login" id="pswd" placeholder="Password">
-    <input type="password" class="login" id="pswdv" placeholder="Re-type Password">
+    <input type="username" class="login" id="usrnm" placeholder="Username" required>
+    <input type="name" class="login" id="name" placeholder="Full Name" required>
+    <input type="password" class="login" id="pswd" placeholder="Password" required>
+    <input type="password" class="login" id="pswdv" placeholder="Re-type Password" required>
     <div>
     <br>
       <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Create Account</button>

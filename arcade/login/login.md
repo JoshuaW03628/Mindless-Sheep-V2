@@ -79,8 +79,8 @@
     <h1 class="header">
       Log In
     </h1>
-    <input type="username" class="login" id="usrnm" placeholder="Username">
-    <input type="password" class="login" id="pswd" placeholder="Password">
+    <input type="username" class="login" id="usrnm" placeholder="Username" required>
+    <input type="password" class="login" id="pswd" placeholder="Password" required>
     <div>
     <br>
       <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Enter</button>
