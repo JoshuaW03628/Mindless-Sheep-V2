@@ -3,7 +3,27 @@
 
 @import "{{ site.theme }}";
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #242424; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #242424; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #f1cc0c; 
+}
+
+/* changes highlight color from blue */
 ::selection {
   background: #f1cc0c;
   color: #232322;
