@@ -19,7 +19,7 @@
     justify-content: center;
     }
 </style>
-    <canvas width="750" height="585" id="game"></canvas>
+    <canvas width="555" height="385" id="game"></canvas>
     
 
 <script>
