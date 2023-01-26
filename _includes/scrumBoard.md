@@ -1,7 +1,7 @@
 | To-do | In Progress | Completed |
 | :---: | :---------: | :-------: |
-| Account Page design | Refine details of our project | Agile manifesto |
-| Implement database info onto Account page | Work on creating issues to track progress | Basic layout of site |
-| Develop games | Performance Task Scoring (individual) | Ideation of project |
-| Develop currency system|  | Customize individual pages |
-| Leaderboard display (reading data from database) |  |  |
+| Develop games fully | Refine details of our project | Agile manifesto |
+| Develop currency system | Work on creating issues to track progress | Basic layout of site |
+|  | Leaderboard display (reading data from database) | Ideation of project |
+|  | Implement database info onto Account page | Customize individual pages |
+|  | Account Page design |  |
