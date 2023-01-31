@@ -2,7 +2,7 @@
 
 Find opened issues [here](https://github.com/Azeem-Khan1/TripleAJv3/issues)
 
-## Scrum Board
+## Scrum Board can be accessed [here](https://github.com/users/Azeem-Khan1/projects/1)
 
 <iframe src="https://github.com/users/Azeem-Khan1/projects/1"></iframe>
 <style>
