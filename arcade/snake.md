@@ -1,6 +1,5 @@
 {% include arcadeSubmenu.html %}
 
-
 <html>
 <head>
   <style>
@@ -20,6 +19,7 @@
   </div>
 </body>
 </html>
+
 
 <style>
     #game-board {
@@ -100,7 +100,7 @@
       case "down":
         nextY++;
         break;
-      case "up"
+      case "up":
         nextY++;
         break;
       }
