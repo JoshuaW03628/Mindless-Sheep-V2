@@ -1,128 +1,172 @@
-{% include arcadeSubmenu.html %}
-
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <style>
-      #game-board {
-        border: 1px solid black;
-        width: 500px;
-        height: 500px;
-        margin: 0 auto;
-        position: relative;
-      }
-    </style>
-  </head>
-  <body onload="init()">
-    <div id="game-board"></div>
-  </body>
+<head>
+  <style>
+    #game-board {
+      width: 500px;
+      height: 500px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <button id="start-btn">Start Game</button>
+  <div id="game-board"></div>
+  <div id="game-over" style="display: none;">
+    <p>Game Over</p>
+    <button id="retry-btn">Retry</button>
+  </div>
+</body>
+<script src="snake.js"></script>
 </html>
 
 <style>
-  #snake {
-    background-color: green;
-    position: absolute;
+    #game-board {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+  }
+
+  .snake-unit {
     width: 10px;
     height: 10px;
-    border-radius: 5px;
+    position: absolute;
+    background-color: green;
+  }
+
+  .food-unit {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background-color: red;
   }
 </style>
 
 <script>
-    const board = document.getElementById("game-board");
-  const snake = [];
-  let direction = "right";
-  let food = null;
+  const startBtn = document.getElementById("start-btn");
+  const retryBtn = document.getElementById("retry-btn");
+  const gameBoard = document.getElementById("game-board");
+  const gameOver = document.getElementById("game-over");
 
-  const createFood = () => {
-    food = document.createElement("div");
-    food.classList.add("food");
-    food.style.left = Math.floor(Math.random() * 49) * 10 + "px";
-    food.style.top = Math.floor(Math.random() * 49) * 10 + "px";
-    board.appendChild(food);
+  let snake = [];
+  let food = null;
+  let direction = "right";
+  let gameInterval = null;
+
+  const createSnake = () => {
+    snake = [];
+    for (let i = 4; i >= 0; i--) {
+      snake.push({ x: i, y: 0 });
+    }
   };
 
-  const move = () => {
-    for (let i = snake.length - 1; i > 0; i--) {
-      snake[i].style.left = snake[i - 1].style.left;
-      snake[i].style.top = snake[i - 1].style.top;
-    }
+  const createFood = () => {
+    food = {
+      x: Math.floor(Math.random() * (gameBoard.offsetWidth / 10)),
+      y: Math.floor(Math.random() * (gameBoard.offsetHeight / 10)),
+    };
+  };
+
+  const drawSnake = () => {
+    snake.forEach((unit) => {
+      let snakeUnit = document.createElement("div");
+      snakeUnit.classList.add("snake-unit");
+      snakeUnit.style.left = unit.x * 10 + "px";
+      snakeUnit.style.top = unit.y * 10 + "px";
+      gameBoard.appendChild(snakeUnit);
+    });
+  };
+
+  const drawFood = () => {
+    let foodUnit = document.createElement("div");
+    foodUnit.classList.add("food-unit");
+    foodUnit.style.left = food.x * 10 + "px";
+    foodUnit.style.top = food.y * 10 + "px";
+    gameBoard.appendChild(foodUnit);
+  };
+
+  const moveSnake = () => {
+    let nextX = snake[0].x;
+    let nextY = snake[0].y;
 
     switch (direction) {
       case "right":
-        snake[0].style.left =
-          parseInt(snake[0].style.left) + 10 + "px";
+        nextX++;
         break;
       case "left":
-        snake[0].style.left =
-          parseInt(snake[0].style.left) - 10 + "px";
-        break;
-      case "up":
-        snake[0].style.top =
-          parseInt(snake[0].style.top) - 10 + "px";
+        nextX++;
         break;
       case "down":
-        snake[0].style.top =
-          parseInt(snake[0].style.top) + 10 + "px";
+        nextY++;
         break;
-    }
-
-    if (
-      snake[0].style.left === food.style.left &&
-      snake[0].style.top === food.style.top
-    ) {
-      snake.push(food);
-      board.removeChild(food);
-      createFood();
-    }
-
-    if (
-      parseInt(snake[0].style.left) < 0 ||
-      parseInt(snake[0].style.left) > 490 ||
-      parseInt(snake[0].style.top) < 0 ||
-      parseInt(snake[0].style.top) > 490
-    ) {
-      alert("game over");
-      clearInterval(gameLoop);
-    }
-
-    for (let i = 1; i < snake.length; i++) {
-      if (
-        snake[0].style.left === snake[i].style.left &&
-        snake[0].style.top === snake[i].style.top
-      ) {
-        alert("game over");
-        clearInterval(gameLoop);
+      case "up"
+        nextY++;
+        break;
       }
+
+    if (
+      nextX < 0 ||
+      nextX >= gameBoard.offsetWidth / 10 ||
+      nextY < 0 ||
+      nextY >= gameBoard.offsetHeight / 10 ||
+      snake.some((unit) => unit.x === nextX && unit.y === nextY)
+    ) {
+      clearInterval(gameInterval);
+      gameOver.style.display = "block";
+      return;
     }
+
+    if (nextX === food.x && nextY === food.y) {
+      food = null;
+      createFood();
+      drawFood();
+    } else {
+      snake.pop();
+    }
+
+    snake.unshift({ x: nextX, y: nextY });
+    gameBoard.innerHTML = "";
+    drawFood();
+    drawSnake();
   };
 
-  for (let i = 0; i < 5; i++) {
-    snake[i] = document.createElement("div");
-    snake[i].classList.add("snake");
-    snake[i].style.left = (i * 10) + "px";
-    board.appendChild(snake[i]);
-  }
+  startBtn.addEventListener("click", () => {
+    createSnake();
+    createFood();
+    drawFood();
+    drawSnake();
+    gameInterval = setInterval(moveSnake, 100);
+  });
 
-  createFood();
+  retryBtn.addEventListener("click", () => {
+    gameOver.style.display = "none";
+    createSnake();
+    createFood();
+    drawFood();
+    drawSnake();
+    gameInterval = setInterval(moveSnake, 100);
+  });
 
-  document.addEventListener("keydown", (event) => {
-    switch (event.keyCode) {
-      case 37:
-        if (direction !== "right") direction = "left";
+  document.addEventListener("keydown", (e) => {
+    switch (e.code) {
+      case "ArrowLeft":
+        if (direction === "right") return;
+        direction = "left";
         break;
-      case 38:
-        if (direction !== "down") direction = "up";
+      case "ArrowUp":
+        if (direction === "down") return;
+        direction = "up";
         break;
-      case 39:
-        if (direction !== "left") direction = "right";
+      case "ArrowRight":
+        if (direction === "left") return;
+        direction = "right";
         break;
-      case 40:
-        if (direction !== "up") direction = "down";
+      case "ArrowDown":
+        if (direction === "up") return;
+        direction = "down";
         break;
     }
   });
+</script>
 
-  const gameLoop = setInterval(move, 100);
-  </script>
+
