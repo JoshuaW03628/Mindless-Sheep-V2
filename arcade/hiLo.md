@@ -15,23 +15,23 @@
 <body onload="randomNum()">
   <div class="mainContainer" id="mainContainer">
     <div class="vCenter">
-      <h1 style="font-size: 71px;">Hi-Lo</h1>
+      <h1 style="font-size: 32pt;">Hi-Lo</h1>
       <div class="theIcon">
         <i class="fas fa-question" id="theIcon"></i>
       </div>
       <div class="theGuessing" id="theGuessing">
-        <h1>Choose a number between 1 and 100</h1><br>
+        <h1 style="font-size: 16pt;">Choose a number between 1 and 100</h1><br>
         <input type="text" id="numInput" class="numInput" te /><br><br>
         <input type="button" value="Make Your Guess!" onclick="guessNum()" class="guessButton" id="guessButton">
       </div>
       <div id="congo" style="display: none;">
         <br>
-        <h1 style="font-size: 71px;" id="correctNum"></h1><br>
-        <h1>🎉Congratulations! You guessed correct number✌️</h1>
+        <h1 style="font-size: 71px; margin-top: -4%;" id="correctNum"></h1><br>
+        <h1 style="font-size: 16pt; margin-bottom: 4%;">🎉Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
         <input type="button" value="Play Again!" onclick="location.reload()" class="guessButton">
       </div>
       <br>
-      <p>Number of guesses: <b id="counter"></b></p>
+      <p id="guessssses">Number of guesses: <b id="counter2"></b></p>
     </div>
   </div>
 
@@ -39,61 +39,60 @@
 
 </html>
 
-<style> {
-  margin: 0;
-  padding: 0;
+<style>
+
+* {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-
-body {
-  text-align: bottom;
-  font-family: "Open Sans", sans-serif;
-  background-color: orangered;
-  color: white;
-}
-
-.mainContent {
-  position: relative;
-}
-
-.vCenter {
-  width: 100%;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-18%, 0%);
+.mainContainer {
+  position: absolute;
+  width: 94%;
+  text-align: center;
 }
 
 .theIcon {
-  font-size: 121px;
+  font-size: 70px;
+  margin: 4%;
 }
 
 
 .numInput {
+  outline: none;
+  margin: none 2% 2% 2%;
   text-align: center;
   font-size: 31px;
   width: 61px;
   height: 61px;
   border-style: solid;
   border-width: 5px;
-  border-color: white;
+  border-color: #f1cc0c;
   color: white;
   background-color: transparent;
+  transition-duration: 0.3s;
+}
+
+.numInput:focus {
+  border-color: white;
 }
 
 .guessButton {
-  background-color: white;
+  margin: 2%;
+  background-color: #f1cc0c;
   border: none;
   color: black;
   padding: 20px 32px;
-  text-align: bottom;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
   cursor: pointer;
   border-radius: 3px;
+  transition-duration: 0.3s;
 }
+
+.guessButton:hover {
+  background-color: white;
+}
+
 </style>
 <script>
 
@@ -102,10 +101,13 @@ var counter = 0;
 var db;
 var name;
 
+//generates random number
 function randomNum() {
   theNum = Math.floor(Math.random() * 100 + 1);
 }
 
+
+// makes the 'enter' key work
 var input = document.getElementById("numInput");
 input.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
@@ -114,26 +116,26 @@ input.addEventListener("keyup", function (event) {
   }
 });
 
-
+// The actual game
 function guessNum() {
   counter++;
+  tokens=25-counter;
+  document.getElementById("counter2").innerHTML = counter;
   document.getElementById("counter").innerHTML = counter;
+  document.getElementById("tokens").innerHTML = tokens;
   var numIn = 0;
   numIn = document.getElementById("numInput").value;
   if (numIn > theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-down";
-    document.body.style.backgroundColor = "red";
   } else if (numIn < theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-up";
-    document.body.style.backgroundColor = "red";
   } else if (numIn == theNum) {
     document.getElementById("theIcon").className = "fas fa-check-circle";
     document.getElementById("theGuessing").style.display = "none";
     document.getElementById("correctNum").innerHTML = theNum;
+    document.getElementById("guessssses").style.display = "none";
     document.getElementById("congo").style.display = "block";
-    document.body.style.backgroundColor = "limegreen";
   }
   document.getElementById("numInput").value = "";
 }
 </script>
-.
