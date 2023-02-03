@@ -54,10 +54,10 @@
         nextX--;
         break;
       case "down":
-        nextY--;
+        nextY++;
         break;
       case "up":
-        nextY++;
+        nextY;
         break;
       }
 

@@ -25,22 +25,22 @@
 
 
 <style>
-    #game-board {
+    #game-board  {
     width: 500px;
     height: 500px;
-    border: 1px solid black;
+    border: 10px solid black;
   }
 
   .snake-unit {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     position: absolute;
     background-color: green;
   }
 
   .food-unit {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     position: absolute;
     background-color: red;
   }
@@ -101,10 +101,10 @@
         nextX--;
         break;
       case "down":
-        nextY--;
+        nextY++;
         break;
       case "up":
-        nextY++;
+        nextY--;
         break;
       }
 
