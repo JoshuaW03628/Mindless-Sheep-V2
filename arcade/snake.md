@@ -1,15 +1,6 @@
 {% include arcadeSubmenu.html %}
 
 <html>
-<head>
-  <style>
-    #game-board {
-      width: 500px;
-      height: 500px;
-      border: 1px solid black;
-    }
-  </style>
-</head>
 <body>
   <button id="start-btn">Start Game</button>
   <div id="game-board"></div>
@@ -23,7 +14,8 @@
 
 
 <style>
-    #game-board  {
+  
+  #game-board  {
     width: 500px;
     height: 500px;
     border: 10px solid black;
