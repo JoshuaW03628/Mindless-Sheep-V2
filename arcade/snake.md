@@ -19,7 +19,6 @@
     <button id="retry-btn">Retry</button>
   </div>
 </body>
-<script src="snake.js"></script>
 </html>
 
 
