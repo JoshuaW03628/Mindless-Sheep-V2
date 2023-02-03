@@ -51,10 +51,10 @@
         nextX++;
         break;
       case "left":
-        nextX++;
+        nextX--;
         break;
       case "down":
-        nextY++;
+        nextY--;
         break;
       case "up":
         nextY++;
