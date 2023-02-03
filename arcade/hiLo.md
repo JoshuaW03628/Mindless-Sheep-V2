@@ -26,12 +26,12 @@
       </div>
       <div id="congo" style="display: none;">
         <br>
-        <h1 style="font-size: 71px;" id="correctNum"></h1><br>
-        <h1 style="font-size: 16pt; margin-bottom: 4%;">🎉Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses</h1>
+        <h1 style="font-size: 71px; margin-top: -4%;" id="correctNum"></h1><br>
+        <h1 style="font-size: 16pt; margin-bottom: 4%;">🎉Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
         <input type="button" value="Play Again!" onclick="location.reload()" class="guessButton">
       </div>
       <br>
-      <p>Number of guesses: <b id="counter2"></b></p>
+      <p id="guessssses">Number of guesses: <b id="counter2"></b></p>
     </div>
   </div>
 
@@ -119,8 +119,10 @@ input.addEventListener("keyup", function (event) {
 // The actual game
 function guessNum() {
   counter++;
+  tokens=25-counter;
   document.getElementById("counter2").innerHTML = counter;
   document.getElementById("counter").innerHTML = counter;
+  document.getElementById("tokens").innerHTML = tokens;
   var numIn = 0;
   numIn = document.getElementById("numInput").value;
   if (numIn > theNum) {
@@ -131,6 +133,7 @@ function guessNum() {
     document.getElementById("theIcon").className = "fas fa-check-circle";
     document.getElementById("theGuessing").style.display = "none";
     document.getElementById("correctNum").innerHTML = theNum;
+    document.getElementById("guessssses").style.display = "none";
     document.getElementById("congo").style.display = "block";
   }
   document.getElementById("numInput").value = "";
