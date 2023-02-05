@@ -179,8 +179,19 @@
                 opacity: 1;
             }
         }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
         .animatef {
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.5s forwards;
+        }
+        .animater {
+            animation: fadeOut 0.4s forwards;
         }
     </style>
     <script>
@@ -195,10 +206,18 @@
             form.classList.add("animatef");
         }
         function closeFormDel() { 
-            form = document.getElementById("del")
+            form = document.getElementById("del");
+            form.classList.remove("animatef");
+            form.classList.add("animater");
             form2 = document.getElementById("changepwd")
-            form.style.display = "none";
-            form2.style.display = "none";
+            form2.classList.remove("animatef");
+            form2.classList.add("animater");
+            setTimeout(function() {
+                form.style.display = "none";
+                form.classList.remove("animater");
+                form2.style.display = "none";
+                form2.classList.remove("animater");
+            }, 400);
         }
     </script>  
 </head>
