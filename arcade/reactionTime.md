@@ -19,8 +19,21 @@
         document.getElementById("playnow").style.display = "none";
         document.getElementById("scoreend").style.display = "none";
         document.getElementById("scoredisplay").style.display = "none";
+        document.getElementById("rules").style.display = "none";
+        document.getElementById("tryagain").style.display = "none";
+    }
+    function progbar() {
+        const progressBar = document.getElementsByClassName('progress-bar')[0]
+        const computedStyle = getComputedStyle(progressBar);
+        setInterval(() => {
+            const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
+            progressBar.style.setProperty('--width', width + .0295);
+            if (width >=100)
+                progressBar.style.setProperty('--width', 100);
+        });
     }
     function countdown() {
+        score = 0
         var audio = new Audio('{{ site.baseurl }}imgs/countdown.mp3');
         var audio2 = new Audio('{{ site.baseurl }}imgs/go.mp3')
         hidetargets();
@@ -42,9 +55,11 @@
                         document.getElementById("go").style.display = "none";
                         document.getElementById("circle").style.display = "block";
                         document.getElementById("scoredisplay").style.display = "block";
-                        document.getElementById("scoredisplay").innerHTML = "Score: " + score;
+                        progbar()
+                        document.getElementsByClassName('progress-bar')[0].style.setProperty('--width', 0);
                         setTimeout(function() {
                             hidetargets();
+                            document.getElementById("tryagain").style.display = "block";
                             document.getElementById("scoreend").style.display = "block";
                             document.getElementById("scoreend").innerHTML = "Total score: " + score;
                         }, 15000);
@@ -60,20 +75,52 @@
         var ding = new Audio('{{ site.baseurl }}imgs/ding.mp3');
         ding.play();
         score = score + 1;
-        width = generateRandomIntegerInRange(5, 25);
-        y = generateRandomIntegerInRange(10, 30);
-        x = generateRandomIntegerInRange(0, 60);
-        document.getElementById("circle").style.width = width + "%";
-        document.getElementById("circle").style.marginTop = y + "%";
-        document.getElementById("circle").style.marginLeft = x + "%";
-        document.getElementById("scoredisplay").innerHTML = "Score: " + score;
+        width = generateRandomIntegerInRange(40, 130);
+        y = generateRandomIntegerInRange(500, 750);
+        x = generateRandomIntegerInRange(50, 780);
+        document.getElementById("circle").style.width = width + "px";
+        document.getElementById("circle").style.height = width + "px";
+        document.getElementById("circle").style.borderRadius = width / 2 + "px";
+        document.getElementById("circle").style.left = x/10 + "%";
+        document.getElementById("circle").style.top = y/10 + "%";
+        document.getElementById("scrdisp").innerHTML = score;
     }
     </script>
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        .progress-bar {
+            position: absolute;
+            top: 780px;
+            left: 22px;
+            width: 599px;
+            height: 2em;
+            z-index: -1;
+            background-color: ;
+        }
+        .progress-bar::before {
+            content: '';
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 1em;
+            bottom: 0em;
+            width: calc(var(--width, 0) * 1%);
+            max-width: 100%;
+            background-color: #f1cc0c;
+        }
+        h1 {
+            font-size: 32pt;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
         #outer {
-            width: 100%;
-            height: 50%;
+            width: 99%;
+            height: 500px;
             border: 3px solid #f1cc0c;
+            border-radius: 30px;
         }
         .countdown {
             display: none;
@@ -87,38 +134,42 @@
         }
         .circle {
             display: none;
-            width: 20%;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 10%;
-            z-index: 10;
+            position: absolute;
+            top: 60%;
+            left: 42.5%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            background-color: #f1cc0c;
         }
-        #playnow {
+        .playnow {
           outline: none;
           -webkit-tap-highlight-color: transparent;
           font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
           font-size: 30px;
-          margin-top: 35%; 
-          margin-bottom: 4%;
           position: inline;
           width: 60%;
           margin-left: 20%;
           margin-right: 20%;
-          padding: 2%;
+          height: 100px;
+          margin-top: 100px;
+          margin-bottom: 200px;
           border-radius: 8px;
           background-color: #302f2f;
           color: #f1cc0c;
           border: none;
           transition-duration: 0.3s;
         }
-        #playnow:hover {
+        .playnow:hover {
           color: #242424;
           background-color: #f1cc0c;
         }
+        #tryagain {
+            display: none;
+        }
         #scoredisplay {
             display: none;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            font-size: 35px;
+            font-size: 20pt;
             text-align: center;
             width: 30%;
             margin-top: 3%;
@@ -130,27 +181,63 @@
         }
         #scoreend {
             display: none;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            font-size: 35px;
+            font-size: 20pt;
             text-align: center;
-            width: 40%;
-            margin-top: 10%;
+            width: 30%;
+            margin-top: 3%;
             margin-left: auto;
             margin-right: auto;
             border-radius: 15px;
             background-color: #3b3a3a;
             padding-bottom: 5px;
         }
+        .tokenicon {
+            width: 28px;
+            margin-top: -5px;
+            vertical-align: middle;
+        }
+        #rules {
+            padding: 30px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            text-align: center;
+            background-color: #302f2f;
+        }
+        .progressbar {
+            position: absolute;
+            top: 826px;
+            background-color: red;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            height: 20px;
+            width: 643px;
+            z-index: -1;
+        }
+        .prog {
+            width: 20%;
+            height: 20px;
+            background-color: black;
+            z-index: 1;
+            border-radius: 40px;
+            border-top-left-radius: 0px;
+        }
     </style>
+    <h1>Reaction Time</h1>
     <div id="outer">
-        <p class="scoreDisplay" id="scoredisplay"></p>
-        <input type="button" id="playnow" value="Start Game for 15 Tokens" onclick="countdown()">
+        <div id="rules">
+            <h2 style="font-size: 20pt; margin-bottom: 20px;">Rules</h2>
+            <p style="font-size: 12pt;">You have 15 seconds to click as many targets as you can. <br><br> Your score = the tokens you earn (need 15 to break even!)</p>
+        </div>
+        <p class="scoreDisplay" id="scoredisplay">Score: <span id="scrdisp" style="color: #f1cc0c;">0</span></p>
+        <button type="button" class="playnow" id="playnow" value="" onclick="countdown()">Start Game for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
         <p class="countdown" id="3">3</p>
         <p class="countdown" id="2">2</p>
         <p class="countdown" id="1">1</p>
         <p class="countdown" id="go">GO</p>
-        <img src="{{ site.baseurl }}/arcade/imgs/circle.png" class="circle" id="circle" draggable="false" onclick="gameplay()">
+        <div class="circle" id="circle" onclick="gameplay()"></div>
+        <div class="progress-bar" style="--width: 0"></div>
         <p class="scoreDisplay" id="scoreend"></p>
+        <button type="button" class="playnow" id="tryagain" value="" onclick="countdown()">Try again for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
     </div>
     
 </body>
