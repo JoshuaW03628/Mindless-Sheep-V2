@@ -1,202 +1,203 @@
 {% include arcadeSubmenu.html %}
 
-
-<html>
+<html lang="en">
 <head>
-  <title>Basic Pong HTML Game</title>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <style>
+        h1 {
+            font-size: 32pt;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        body{
+            background-color: dimgray;
+        }
+        #pong{
+            border: 2px solid #f1cc0c;
+            position: relative;
+            margin :auto;
+            top:0;
+            right:0;
+            left:3.5%;
+            bottom:0;
+        }
+    </style>
 </head>
 <body>
-<style>
-    html, body {
-    height: 100%;
-    margin: 0;
-    }
-    body {
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    }
-</style>
-    <canvas width="555" height="385" id="game"></canvas>
-    
-
-<script>
-const canvas = document.getElementById('game');
-const context = canvas.getContext('2d');
-const grid = 15;
-const paddleHeight = grid * 5; // 80
-const maxPaddleY = canvas.height - grid - paddleHeight;
-
-var paddleSpeed = 6;
-var ballSpeed = 5;
-
-const leftPaddle = {
-  // start in the middle of the game on the left side
-  x: grid * 2,
-  y: canvas.height / 2 - paddleHeight / 2,
-  width: grid,
-  height: paddleHeight,
-
-  // paddle velocity
-  dy: 0
-};
-const rightPaddle = {
-  // start in the middle of the game on the right side
-  x: canvas.width - grid * 3,
-  y: canvas.height / 2 - paddleHeight / 2,
-  width: grid,
-  height: paddleHeight,
-
-  // paddle velocity
-  dy: 0
-};
+    <h1>Pong</h1>
+   <canvas id="pong" width="600" height="400"></canvas>
+   <script>
+    // select canvas element
+const canvas = document.getElementById("pong");
+// getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
+const ctx = canvas.getContext('2d');
+// load sounds
+let hit = new Audio();
+let wall = new Audio();
+let userScore = new Audio();
+let comScore = new Audio();
+hit.src = "sounds/hit.mp3";
+wall.src = "sounds/wall.mp3";
+comScore.src = "sounds/comScore.mp3";
+userScore.src = "sounds/userScore.mp3";
+// Ball object
 const ball = {
-  // start in the middle of the game
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  width: grid,
-  height: grid,
-
-  // keep track of when need to reset the ball position
-  resetting: false,
-
-  // ball velocity (start going to the top-right corner)
-  dx: ballSpeed,
-  dy: -ballSpeed
-};
-
-// check for collision between two objects using axis-aligned bounding box (AABB)
-// @see https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-function collides(obj1, obj2) {
-  return obj1.x < obj2.x + obj2.width &&
-         obj1.x + obj1.width > obj2.x &&
-         obj1.y < obj2.y + obj2.height &&
-         obj1.y + obj1.height > obj2.y;
+    x : canvas.width/2,
+    y : canvas.height/2,
+    radius : 10,
+    velocityX : 5,
+    velocityY : 5,
+    speed : 7,
+    color : "WHITE"
 }
-
-// game loop
-function loop() {
-  requestAnimationFrame(loop);
-  context.clearRect(0,0,canvas.width,canvas.height);
-
-  // move paddles by their velocity
-  leftPaddle.y += leftPaddle.dy;
-  rightPaddle.y += rightPaddle.dy;
-
-  // prevent paddles from going through walls
-  if (leftPaddle.y < grid) {
-    leftPaddle.y = grid;
-  }
-  else if (leftPaddle.y > maxPaddleY)
-    leftPaddle.y = maxPaddleY;
-  
-
-  if (rightPaddle.y < grid) {
-    rightPaddle.y = grid;
-  }
-  else if (rightPaddle.y > maxPaddleY) {
-    rightPaddle.y = maxPaddleY;
-  }
-
-  // draw paddles
-  context.fillStyle = 'white';
-  context.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
-  context.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
-
-  // move ball by its velocity
-  ball.x += ball.dx;
-  ball.y += ball.dy;
-
-  // prevent ball from going through walls by changing its velocity
-  if (ball.y < grid) {
-    ball.y = grid;
-    ball.dy *= -1;
-  }
-  else if (ball.y + grid > canvas.height - grid) {
-    ball.y = canvas.height - grid * 2;
-    ball.dy *= -1;
-  }
-
-  // reset ball if it goes past paddle (but only if we haven't already done so)
-  if ( (ball.x < 0 || ball.x > canvas.width) && !ball.resetting) {
-    ball.resetting = true;
-  }
-
-    // give some time for the player to recover before launching the ball again
-    setTimeout(() => {
-      ball.resetting = false;
-      ball.x = canvas.width / 2;
-      ball.y = canvas.height / 2;
-    }, 400);
-  
-
-  // check to see if ball collides with paddle. if they do change x velocity
-  if (collides(ball, leftPaddle)) {
-    ball.dx *= -1;
-
-    // move ball next to the paddle otherwise the collision will happen again
-    // in the next frame
-    ball.x = leftPaddle.x + leftPaddle.width;
-  }
-  else if (collides(ball, rightPaddle)) {
-    ball.dx *= -1;
-
-    // move ball next to the paddle otherwise the collision will happen again
-    // in the next frame
-    ball.x = rightPaddle.x - ball.width;
-  }
-
-  // draw ball
-  context.fillRect(ball.x, ball.y, ball.width, ball.height);
-
-  // draw walls
-  context.fillStyle = 'lightgrey';
-  context.fillRect(0, 0, canvas.width, grid);
-  context.fillRect(0, canvas.height - grid, canvas.width, canvas.height);
-
-  // draw dotted line down the middle
-  for (let i = grid; i < canvas.height - grid; i += grid * 2) {
-    context.fillRect(canvas.width / 2 - grid / 2, i, grid, grid);
-  }
+// User Paddle
+const user = {
+    x : 0, // left side of canvas
+    y : (canvas.height - 100)/2, // -100 the height of paddle
+    width : 10,
+    height : 100,
+    score : 0,
+    color : "WHITE"
 }
-
-// listen to keyboard events to move the paddles
-document.addEventListener('keydown', function(e) {
-
-  // up arrow key
-  if (e.which === 38) {
-    rightPaddle.dy = -paddleSpeed;
-  }
-  // down arrow key
-  else if (e.which === 40) {
-    rightPaddle.dy = paddleSpeed;
-  }
-
-  // w key
-  if (e.which === 87) {
-    leftPaddle.dy = -paddleSpeed;
-  }
-  // a key
-  else if (e.which === 83) {
-    leftPaddle.dy = paddleSpeed;
-  }
-});
-
-// listen to keyboard events to stop the paddle if key is released
-document.addEventListener('keyup', function(e) {
-  if (e.which === 38 || e.which === 40) {
-    rightPaddle.dy = 0;
-  }
-
-  if (e.which === 83 || e.which === 87) {
-    leftPaddle.dy = 0;
-  }
-});
-
-// start the game
-requestAnimationFrame(loop);
+// COM Paddle
+const com = {
+    x : canvas.width - 10, // - width of paddle
+    y : (canvas.height - 100)/2, // -100 the height of paddle
+    width : 10,
+    height : 100,
+    score : 0,
+    color : "WHITE"
+}
+// NET
+const net = {
+    x : (canvas.width - 2)/2,
+    y : 0,
+    height : 10,
+    width : 2,
+    color : "WHITE"
+}
+// draw a rectangle, will be used to draw paddles
+function drawRect(x, y, w, h, color){
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+}
+// draw circle, will be used to draw the ball
+function drawArc(x, y, r, color){
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2,true);
+    ctx.closePath();
+    ctx.fill();
+}
+// listening to the mouse
+canvas.addEventListener("mousemove", getMousePos);
+function getMousePos(evt){
+    let rect = canvas.getBoundingClientRect();
+    user.y = evt.clientY - rect.top - user.height/2;
+}
+// when COM or USER scores, we reset the ball
+function resetBall(){
+    ball.x = canvas.width/2;
+    ball.y = canvas.height/2;
+    ball.velocityX = -ball.velocityX;
+    ball.speed = 7;
+}
+// draw the net
+function drawNet(){
+    for(let i = 0; i <= canvas.height; i+=15){
+        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+    }
+}
+// draw text
+function drawText(text,x,y){
+    ctx.fillStyle = "#FFF";
+    ctx.font = "75px fantasy";
+    ctx.fillText(text, x, y);
+}
+// collision detection
+function collision(b,p){
+    p.top = p.y;
+    p.bottom = p.y + p.height;
+    p.left = p.x;
+    p.right = p.x + p.width;
+    b.top = b.y - b.radius;
+    b.bottom = b.y + b.radius;
+    b.left = b.x - b.radius;
+    b.right = b.x + b.radius;
+    return p.left < b.right && p.top < b.bottom && p.right > b.left && p.bottom > b.top;
+}
+// update function, the function that does all calculations
+function update(){
+    // change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
+    if( ball.x - ball.radius < 0 ){
+        com.score++;
+        comScore.play();
+        resetBall();
+    }else if( ball.x + ball.radius > canvas.width){
+        user.score++;
+        userScore.play();
+        resetBall();
+    }
+    // the ball has a velocity
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
+    // computer plays for itself, and we must be able to beat it
+    // simple AI
+    com.y += ((ball.y - (com.y + com.height/2)))*0.1;
+    // when the ball collides with bottom and top walls we inverse the y velocity.
+    if(ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height){
+        ball.velocityY = -ball.velocityY;
+        wall.play();
+    }
+    // we check if the paddle hit the user or the com paddle
+    let player = (ball.x + ball.radius < canvas.width/2) ? user : com;
+    // if the ball hits a paddle
+    if(collision(ball,player)){
+        // play sound
+        hit.play();
+        // we check where the ball hits the paddle
+        let collidePoint = (ball.y - (player.y + player.height/2));
+        // normalize the value of collidePoint, we need to get numbers between -1 and 1.
+        // -player.height/2 < collide Point < player.height/2
+        collidePoint = collidePoint / (player.height/2);
+        // when the ball hits the top of a paddle we want the ball, to take a -45degees angle
+        // when the ball hits the center of the paddle we want the ball to take a 0degrees angle
+        // when the ball hits the bottom of the paddle we want the ball to take a 45degrees
+        // Math.PI/4 = 45degrees
+        let angleRad = (Math.PI/4) * collidePoint;
+        // change the X and Y velocity direction
+        let direction = (ball.x + ball.radius < canvas.width/2) ? 1 : -1;
+        ball.velocityX = direction * ball.speed * Math.cos(angleRad);
+        ball.velocityY = ball.speed * Math.sin(angleRad);
+        // speed up the ball everytime a paddle hits it.
+        ball.speed += 0.1;
+    }
+}
+// render function, the function that does al the drawing
+function render(){
+    // clear the canvas
+    drawRect(0, 0, canvas.width, canvas.height, "#000");
+    // draw the user score to the left
+    drawText(user.score,canvas.width/4,canvas.height/5);
+    // draw the COM score to the right
+    drawText(com.score,3*canvas.width/4,canvas.height/5);
+    // draw the net
+    drawNet();
+    // draw the user's paddle
+    drawRect(user.x, user.y, user.width, user.height, user.color);
+    // draw the COM's paddle
+    drawRect(com.x, com.y, com.width, com.height, com.color);
+    // draw the ball
+    drawArc(ball.x, ball.y, ball.radius, ball.color);
+}
+function game(){
+    update();
+    render();
+}
+// number of frames per second
+let framePerSecond = 50;
+//call the game function 50 times every 1 Sec
+let loop = setInterval(game,1000/framePerSecond);
 </script>
 </body>
 </html>
