@@ -22,7 +22,7 @@
         document.getElementById("rules").style.display = "none";
         document.getElementById("tryagain").style.display = "none";
     }
-    function progbar() {
+    /* function progbar() {
         const progressBar = document.getElementsByClassName('progress-bar')[0]
         const computedStyle = getComputedStyle(progressBar);
         setInterval(() => {
@@ -31,6 +31,27 @@
             if (width >=100)
                 progressBar.style.setProperty('--width', 100);
         });
+    } */
+    function started(duration) {
+        var TotalSeconds = 40;
+        var documentWidth = $(document).width();
+        var start = Date.now();
+        var intervalSetted = null;
+        function timer() {
+            var diff = duration - (((Date.now() - start) / 1000) | 0);
+            var seconds = (diff % 60) | 0;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            $('#timer').html("00:" + seconds);
+            var progresBarWidth = (seconds * documentWidth / TotalSeconds);
+            $('#progress').css({
+                width: progresBarWidth + 'px'
+            });
+            if (diff <= 0) {
+                clearInterval(intervalSetted);
+            }
+        }
+            timer();
+            intervalSetted = setInterval(timer, 1000);
     }
     function countdown() {
         score = 0
@@ -55,7 +76,8 @@
                         document.getElementById("go").style.display = "none";
                         document.getElementById("circle").style.display = "block";
                         document.getElementById("scoredisplay").style.display = "block";
-                        progbar()
+                        // progbar()
+                        started(15)
                         document.getElementsByClassName('progress-bar')[0].style.setProperty('--width', 0);
                         setTimeout(function() {
                             hidetargets();
@@ -203,7 +225,7 @@
             text-align: center;
             background-color: #302f2f;
         }
-        .progressbar {
+        /* .progressbar {
             position: absolute;
             top: 826px;
             background-color: red;
@@ -220,7 +242,7 @@
             z-index: 1;
             border-radius: 40px;
             border-top-left-radius: 0px;
-        }
+        } */
     </style>
     <h1>Reaction Time</h1>
     <div id="outer">
@@ -235,7 +257,9 @@
         <p class="countdown" id="1">1</p>
         <p class="countdown" id="go">GO</p>
         <div class="circle" id="circle" onclick="gameplay()"></div>
-        <div class="progress-bar" style="--width: 0"></div>
+        <!-- <div class="progress-bar" style="--width: 0"></div> -->
+        <div id='timer'></div>
+        <div id='progress' style='background:red; height:5px;'></div>
         <p class="scoreDisplay" id="scoreend"></p>
         <button type="button" class="playnow" id="tryagain" value="" onclick="countdown()">Try again for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
     </div>
