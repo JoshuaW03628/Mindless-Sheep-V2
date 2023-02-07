@@ -25,7 +25,7 @@
   <div class="center">
     <body>
     <button class= "button1" onclick="startgame()">
-      Click to Play
+      15 Tokens to Play
       <span class="first"></span>
       <span class="second"></span>
       <span class="third"></span>
@@ -62,6 +62,7 @@
 </html>
 
 <script> 
+
 onEvent("button1", "click", function( ) {
   setDiv("mainContainer");
 });
@@ -111,9 +112,9 @@ function startgame() {
         font-size: 25px;
         position: relative;
         background: transparent;
-        color: #ffa500;
+        color: #f1cc0c;
         text-transform: uppercase;
-        border: 3px solid #ffa500;
+        border: 3px solid #f1cc0c;
         cursor: pointer;
         transition: all 0.7s;
         overflow: hidden;
@@ -121,7 +122,7 @@ function startgame() {
       }
 
       button:hover {
-        color: #000;
+        color: #f1cc0c;
       }
       span {
         transition: all 0.9s;
@@ -135,7 +136,7 @@ function startgame() {
         top: 0;
         width: 25%;
         height: 100%;
-        background: #ffa500;
+        background: #f1cc0c;
       }
 
       button:hover .first {
@@ -149,7 +150,7 @@ function startgame() {
         top: -100%;
         height: 100%;
         width: 25%;
-        background: #ffa500;
+        background: #f1cc0c;
       }
 
       button:hover .second {
@@ -164,7 +165,7 @@ function startgame() {
         height: 100%;
         top: 100%;
         width: 25%;
-        background: #ffa500;
+        background: #f1cc0c;
       }
 
       button:hover .third {
@@ -179,7 +180,7 @@ function startgame() {
         top: 0;
         height: 100%;
         width: 25%;
-        background: #ffa500;
+        background: #f1cc0c;
       }
 
       button:hover .fourth {
