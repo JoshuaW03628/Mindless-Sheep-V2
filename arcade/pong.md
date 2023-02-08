@@ -170,7 +170,7 @@ function update(){
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
         ball.velocityY = ball.speed * Math.sin(angleRad);
         // speed up the ball everytime a paddle hits it.
-        ball.speed += 0.1;
+        ball.speed += 0.5;
     }
 }
 // render function, the function that does al the drawing
