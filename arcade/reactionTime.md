@@ -21,37 +21,20 @@
         document.getElementById("scoredisplay").style.display = "none";
         document.getElementById("rules").style.display = "none";
         document.getElementById("tryagain").style.display = "none";
+        document.getElementsByClassName('progress-bar')[0].style.display = "none";
     }
-    /* function progbar() {
+    function progbar() {
         const progressBar = document.getElementsByClassName('progress-bar')[0]
         const computedStyle = getComputedStyle(progressBar);
-        setInterval(() => {
+        let id = setInterval(() => {
             const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
-            progressBar.style.setProperty('--width', width + .0295);
+            progressBar.style.setProperty('--width', width + .0316);
             if (width >=100)
                 progressBar.style.setProperty('--width', 100);
         });
-    } */
-    function started(duration) {
-        var TotalSeconds = 40;
-        var documentWidth = $(document).width();
-        var start = Date.now();
-        var intervalSetted = null;
-        function timer() {
-            var diff = duration - (((Date.now() - start) / 1000) | 0);
-            var seconds = (diff % 60) | 0;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            $('#timer').html("00:" + seconds);
-            var progresBarWidth = (seconds * documentWidth / TotalSeconds);
-            $('#progress').css({
-                width: progresBarWidth + 'px'
-            });
-            if (diff <= 0) {
-                clearInterval(intervalSetted);
-            }
-        }
-            timer();
-            intervalSetted = setInterval(timer, 1000);
+        const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
+        if (width >=100)
+            clearInterval(id);
     }
     function countdown() {
         score = 0
@@ -76,14 +59,15 @@
                         document.getElementById("go").style.display = "none";
                         document.getElementById("circle").style.display = "block";
                         document.getElementById("scoredisplay").style.display = "block";
-                        // progbar()
-                        started(15)
+                        document.getElementsByClassName('progress-bar')[0].style.display = "block";
+                        progbar()
                         document.getElementsByClassName('progress-bar')[0].style.setProperty('--width', 0);
                         setTimeout(function() {
                             hidetargets();
                             document.getElementById("tryagain").style.display = "block";
                             document.getElementById("scoreend").style.display = "block";
-                            document.getElementById("scoreend").innerHTML = "Total score: " + score;
+                            document.getElementById("endspan").innerHTML = score;
+                            document.getElementById("endTokens").innerHTML = score - 15 + " ";
                         }, 15000);
                     }, 700);
                 }, 750);
@@ -205,13 +189,13 @@
             display: none;
             font-size: 20pt;
             text-align: center;
-            width: 30%;
-            margin-top: 3%;
+            width: 80%;
+            margin-top: 5%;
             margin-left: auto;
             margin-right: auto;
             border-radius: 15px;
             background-color: #3b3a3a;
-            padding-bottom: 5px;
+            padding: 25px;
         }
         .tokenicon {
             width: 28px;
@@ -225,24 +209,6 @@
             text-align: center;
             background-color: #302f2f;
         }
-        /* .progressbar {
-            position: absolute;
-            top: 826px;
-            background-color: red;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            height: 20px;
-            width: 643px;
-            z-index: -1;
-        }
-        .prog {
-            width: 20%;
-            height: 20px;
-            background-color: black;
-            z-index: 1;
-            border-radius: 40px;
-            border-top-left-radius: 0px;
-        } */
     </style>
     <h1>Reaction Time</h1>
     <div id="outer">
@@ -257,10 +223,8 @@
         <p class="countdown" id="1">1</p>
         <p class="countdown" id="go">GO</p>
         <div class="circle" id="circle" onclick="gameplay()"></div>
-        <!-- <div class="progress-bar" style="--width: 0"></div> -->
-        <div id='timer'></div>
-        <div id='progress' style='background:red; height:5px;'></div>
-        <p class="scoreDisplay" id="scoreend"></p>
+        <div class="progress-bar" style="--width: 0"></div>
+        <p class="scoreDisplay" id="scoreend">Congratulations! Your score was <span id="endspan" style="color: #f1cc0c"></span><br><br>You earned <span id="endTokens" style="color: #f1cc0c"></span><img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></p>
         <button type="button" class="playnow" id="tryagain" value="" onclick="countdown()">Try again for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
     </div>
     
