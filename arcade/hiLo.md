@@ -6,41 +6,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://kit.fontawesome.com/336de93654.js" defer></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hi-Lo Game</title>
 </head>
 
 <body onload="randomNum()">
 <div id="overlay">
   <h2>Hi-Lo Rules;</h2>
-  <p> </p>
-  <p> </p>
-  <li>Guess a number from 1-100, the an arrow will tell you wether the random number is higher or lower, you continue to guess based off of these clues until you guess the number.</li>
-  <li> Tokens: It costs 15 Tokens to Play, you start off with 25 tokens in game, each guess you make you get 1 token subtracted, So if you made 5 guesses you would gain 20 tokens, subtracting The 10 original tokens it cost.   </li>
-   
+  <li>Guess a number from 1-100, the an arrow will tell you wether the random number is higher or lower, you continue to guess based off of these clues until you guess the number.</li><br>
+  <li> Tokens: It costs 15 Tokens to play. You start off with 25 tokens in game and each guess you make takes away 1. So if you made 5 guesses you would earn 20 tokens.</li>
 
-<div class="container">
-  <div class="center">
-    <body>
-    <button class= "button1" onclick="startgame()">
-      15 Tokens to Play
-      <span class="first"></span>
-      <span class="second"></span>
-      <span class="third"></span>
-      <span class="fourth"></span>
-    </button>
-    </body>
+  <div class="container">
+    <div class="center">
+      <body>
+        <button class= "button1" onclick="startgame()">
+          15 Tokens to Play
+          <span class="first"></span>
+          <span class="second"></span>
+          <span class="third"></span>
+          <span class="fourth"></span>
+        </button>
+      </body>
+    </div>
   </div>
-</div>
 </div>
   <div class="mainContainer" id="mainContainer">
     <div class="vCenter">
       <h1 style="font-size: 32pt;">Hi-Lo</h1>
-      <div class="theIcon">
-        <i class="fas fa-question" id="theIcon"></i>
-      </div>
+      <i class='fas fa-question-circle' id='theIcon'></i>
       <div class="theGuessing" id="theGuessing">
         <h1 style="font-size: 16pt;">Choose a number between 1 and 100</h1><br>
         <input type="text" id="numInput" class="numInput" te /><br><br>
@@ -58,23 +53,14 @@
   </div>
 
 </body>
-
 </html>
-
-<script> 
-
-onEvent("button1", "click", function( ) {
-  setDiv("mainContainer");
-});
-
-function startgame() {
-  let div = document.getElementById("overlay");
-  div.style.display = "none";
-}
-</script>
 
 <style>
 
+#theIcon {
+  font-size: 70px;
+  margin: 4%;
+}
 
 .container {
   height: 200px;
@@ -92,127 +78,115 @@ function startgame() {
 }
 
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-      body {
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: sans-serif;
-        background: #000;
-      }
-      button {
-        border: none;
-        padding: 20px 40px;
-        font-size: 25px;
-        position: relative;
-        background: transparent;
-        color: #f1cc0c;
-        text-transform: uppercase;
-        border: 3px solid #f1cc0c;
-        cursor: pointer;
-        transition: all 0.7s;
-        overflow: hidden;
-        border-radius: 80px;
-      }
+button {
+  border: none;
+  padding: 20px 40px;
+  font-size: 25px;
+  position: relative;
+  background: transparent;
+  color: #f1cc0c;
+  text-transform: uppercase;
+  border: 3px solid #f1cc0c;
+  cursor: pointer;
+  transition: all 0.7s;
+  overflow: hidden;
+  border-radius: 80px;
+}
 
-      button:hover {
-        color: #f1cc0c;
-      }
-      span {
-        transition: all 0.9s;
-        z-index: -1;
-      }
+button:hover {
+  color: #f1cc0c;
+}
+span {
+  transition: all 0.9s;
+  z-index: -1;
+}
 
-      button .first {
-        content: "";
-        position: absolute;
-        right: 100%;
-        top: 0;
-        width: 25%;
-        height: 100%;
-        background: #f1cc0c;
-      }
+button .first {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  background: #f1cc0c;
+}
 
-      button:hover .first {
-        top: 0;
-        right: 0;
-      }
-      button .second {
-        content: "";
-        position: absolute;
-        left: 25%;
-        top: -100%;
-        height: 100%;
-        width: 25%;
-        background: #f1cc0c;
-      }
+button:hover .first {
+  top: 0;
+  right: 0;
+}
+button .second {
+  content: "";
+  position: absolute;
+  left: 25%;
+  top: -100%;
+  height: 100%;
+  width: 25%;
+  background: #f1cc0c;
+}
 
-      button:hover .second {
-        top: 0;
-        left: 50%;
-      }
+button:hover .second {
+  top: 0;
+  left: 50%;
+}
 
-      button .third {
-        content: "";
-        position: absolute;
-        left: 50%;
-        height: 100%;
-        top: 100%;
-        width: 25%;
-        background: #f1cc0c;
-      }
+button .third {
+  content: "";
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  top: 100%;
+  width: 25%;
+  background: #f1cc0c;
+}
 
-      button:hover .third {
-        top: 0;
-        left: 25%;
-      }
+button:hover .third {
+  top: 0;
+  left: 25%;
+}
 
-      button .fourth {
-        content: "";
-        position: absolute;
-        left: 100%;
-        top: 0;
-        height: 100%;
-        width: 25%;
-        background: #f1cc0c;
-      }
+button .fourth {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  width: 25%;
+  background: #f1cc0c;
+}
 
-      button:hover .fourth {
-        top: 0;
-        left: 0;
-      }
-
-
+button:hover .fourth {
+  top: 0;
+  left: 0;
+}
 
 div.buttonSubmit input, div.buttonSubmit span {
-
-margin-left: 50px;
-
+  margin-left: 50px;
 }
 
 h2 {
+  text-align: center;
   font-size: 40px;
 }
-
 
 li {
   font-size: 20px;
 }
 
 #overlay{
-  background-color: black;
+  border-radius: 20px;
+  background-color: #302f2f;
   z-index: 99;
   position: absolute;
   z-index: 10;
-  width: 94%;
-  height: 110%;
-
+  width: 84.4%;
+  padding: 5%;
+}
 .guessButton {
   margin: 2%;
   background-color: white;
@@ -224,8 +198,29 @@ li {
   transition-duration: 0.3s;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+.animatef {
+    animation: fadeIn 0.5s forwards;
+}
+.animater {
+    animation: fadeOut 0.4s forwards;
+}
 
-};
 
 * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -235,11 +230,6 @@ li {
   position: absolute;
   width: 94%;
   text-align: center;
-}
-
-.theIcon {
-  font-size: 70px;
-  margin: 4%;
 }
 
 
@@ -282,6 +272,15 @@ li {
 </style>
 <script>
 
+function startgame() {
+  let div = document.getElementById("overlay");
+  div.classList.add("animater");
+  setTimeout(function() {
+    div.style.display = "none";
+    div.classList.remove("animater");
+  }, 500);
+}
+
 var theNum = 0;
 var counter = 0;
 var db;
@@ -309,8 +308,7 @@ function guessNum() {
   document.getElementById("counter2").innerHTML = counter;
   document.getElementById("counter").innerHTML = counter;
   document.getElementById("tokens").innerHTML = tokens;
-  var numIn = 0;
-  numIn = document.getElementById("numInput").value;
+  var numIn = document.getElementById("numInput").value;
   if (numIn > theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-down";
   } else if (numIn < theNum) {

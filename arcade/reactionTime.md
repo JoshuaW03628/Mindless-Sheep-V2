@@ -93,14 +93,11 @@
     }
     </script>
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
         .progress-bar {
             position: absolute;
             top: 780px;
             left: 22px;
-            width: 599px;
+            width: 645px;
             height: 2em;
             z-index: -1;
             background-color: ;
