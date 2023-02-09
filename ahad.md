@@ -1,3 +1,4 @@
+{% include home.html %}
 # DevOps
 > I am responsible for the efficient operation and deployment of our website. This includes working with the development team to build and test code, and ensuring that the software is deployed and running efficiently in production. I am also responsible for monitoring the system and identifying areas for improvement,as well as updating the site so there are no errors. I will work closely with the dev team to troubleshoot issues and identify issues and bugs. Another one of my responsibilities is making sure the website is up at all times, updated and with no issues
  

@@ -28,7 +28,7 @@
         const computedStyle = getComputedStyle(progressBar);
         let id = setInterval(() => {
             const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
-            progressBar.style.setProperty('--width', width + .0316);
+            progressBar.style.setProperty('--width', width + .027);
             if (width >=100)
                 progressBar.style.setProperty('--width', 100);
         });

@@ -1,3 +1,4 @@
+{% include home.html %}
 # Frontend Development
 
 As the frontend developer of the team it is my job to make sure that the site and style of the site is cool and the User Experience for our Fastpages/Frontend Site is good and easy to use for the viewer. So to start of that process There was a few things that I layed out to do for this week, this includes;

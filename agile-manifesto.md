@@ -1,3 +1,5 @@
+{% include home.html %}
+
 # Agile Manifesto
 
 <br>

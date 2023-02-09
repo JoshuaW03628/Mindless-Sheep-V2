@@ -1,3 +1,4 @@
+{% include home.html %}
 # Overview
 
 This site is created with [Mr. Mortensen's template](https://github.com/jm1021/leuck_reunion) and deployed using Github Pages and Jekyll.

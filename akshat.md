@@ -1,4 +1,4 @@
-
+{% include home.html %}
 ## The Backend Process
 
 > For the game, my job as a backend is to collect data for each user that plays the game. 

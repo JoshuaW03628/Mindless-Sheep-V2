@@ -12,6 +12,44 @@
         body{
             background-color: dimgray;
         }
+        #startScreen {
+            text-align: center;
+            font-size: 13.5pt;
+            position: absolute;
+            width: 74.5%;
+            height: 400px;
+            background-color: #202020;
+            border-radius: 20px;
+            padding: 10%;
+            z-index: 99;
+        }
+        .startGame {
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 30px;
+            position: inline;
+            width: 60%;
+            margin-left: 20%;
+            margin-right: 20%;
+            height: 100px;
+            margin-top: 100px;
+            margin-bottom: 200px;
+            border-radius: 8px;
+            background-color: #302f2f;
+            color: #f1cc0c;
+            border: none;
+            transition-duration: 0.3s;
+        }
+        .startGame:hover {
+            color: #242424;
+            background-color: #f1cc0c;
+        }
+        .tokenicon {
+            width: 28px;
+            margin-top: -5px;
+            vertical-align: middle;
+        }
         #pong{
             border: 2px solid #f1cc0c;
             position: relative;
@@ -21,13 +59,30 @@
             left:3.5%;
             bottom:0;
         }
+            @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+        }
+        .animater {
+            animation: fadeOut 0.4s forwards;
+        }
     </style>
 </head>
 <body>
+<div class="outer">
     <h1>Pong</h1>
-   <canvas id="pong" width="600" height="400"></canvas>
-   <script>
-    // select canvas element
+    <div id="startScreen">
+        <p>This game costs <span style="color: #f1cc0c;">10 tokens</span> to play. <br> First to 7 points wins. If you win, you earn <span style="color: #f1cc0c;">20 tokens</span> (<span style="color: #f1cc0c;">10 token</span> profit). <br> User paddle is on the left. AI paddle is on the right. <br> Control your paddle with mouse movements up and down in the yellow box!</p>
+        <button type="button" class="startGame" id="startGame" value="" onclick="startGame()">Start Game for 10 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
+    </div>
+    <canvas id="pong" width="600" height="400"></canvas>
+</div>
+<script>
+// select canvas element
 const canvas = document.getElementById("pong");
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
@@ -196,8 +251,17 @@ function game(){
 }
 // number of frames per second
 let framePerSecond = 50;
-//call the game function 50 times every 1 Sec
-let loop = setInterval(game,1000/framePerSecond);
+//Hide start screen and call the game function 50 times every 1 Sec
+function startGame() {
+    let div = document.getElementById('startScreen');
+    div.classList.add('animater');
+    let loop = setInterval(game,1000/framePerSecond);
+    setTimeout(function() {
+        div.style.display = "none";
+        div.classList.remove("animater");
+    }, 500);
+}
+
 </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+{% include home.html %}
 # Scrum Master
 
 Find opened issues [here](https://github.com/Azeem-Khan1/TripleAJv3/issues)

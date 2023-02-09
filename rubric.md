@@ -1,3 +1,4 @@
+{% include home.html %}
 # Our Idea
 
 The TripleAJ Arcade is a virtual arcade with inbuilt currency. Users can sign up for free and start off with 20 tokens. They will pay tokens to play several digital arcade games and will earn tokens upon victory/score. User's will also be able to view a live leaderboard based on number of tokens. Account customization will include the ability to enter a user's full name -to display on the leaderboard- and change their password, which will update the corresponding record in our database, deployed on AWS with a flask framework.
