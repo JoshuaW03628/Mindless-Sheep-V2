@@ -9,8 +9,14 @@
 </head>
 
 <body>
+<div class="outer">
     <h1>Snake</h1>
+    <div id="startScreen">
+        <p>You know how to play snake ;) <br> It costs <span style="color: #f1cc0c;">10 tokens</span> to play and your score is the number of tokens you earn. <br> (You need a score of 10 to break even) </p>
+        <button type="button" class="startGame" id="start" value="" onclick="startGame()">Start Game for 10 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
+    </div>
     <canvas id="board"></canvas>
+</div>
 </body>
 
 </html>
@@ -18,11 +24,78 @@
 <style>
     body {
         font-family: "Courier New", Courier, monospace;
+    }
+    .outer {
+        position: absolute;
+        width: 94%;
         text-align: center;
+    }
+    #startScreen {
+        font-size: 16pt;
+        position: absolute;
+        width: 80%;
+        height: 400px;
+        background-color: #202020;
+        border-radius: 20px;
+        padding: 10%;
+        z-index: 99;
+    }
+    h1 {
+        font-size: 32pt;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .startGame {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 30px;
+        position: inline;
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+        height: 100px;
+        margin-top: 100px;
+        margin-bottom: 200px;
+        border-radius: 8px;
+        background-color: #302f2f;
+        color: #f1cc0c;
+        border: none;
+        transition-duration: 0.3s;
+    }
+    .startGame:hover {
+        color: #242424;
+        background-color: #f1cc0c;
+    }
+    .tokenicon {
+        width: 28px;
+        margin-top: -5px;
+        vertical-align: middle;
+    }
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+    .animater {
+        animation: fadeOut 0.4s forwards;
     }
 </style>
 
 <script>
+//remove start screen
+function startGame() {
+    let div = document.getElementById('startScreen');
+    div.classList.add('animater');
+    setTimeout(function() {
+        div.style.display = "none";
+        div.classList.remove("animater");
+    }, 500);
+}
+
 //board
 var blockSize=25;
 var rows=20;
