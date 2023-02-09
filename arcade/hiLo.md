@@ -22,7 +22,7 @@
     <div class="center">
       <body>
         <button class= "button1" onclick="startgame()">
-          15 Tokens to Play
+          15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"> to play
           <span class="first"></span>
           <span class="second"></span>
           <span class="third"></span>
@@ -56,6 +56,11 @@
 </html>
 
 <style>
+.tokenicon {
+    width: 28px;
+    margin-top: -5px;
+    vertical-align: middle;
+}
 
 #theIcon {
   font-size: 70px;
