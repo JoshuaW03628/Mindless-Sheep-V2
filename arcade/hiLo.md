@@ -220,10 +220,10 @@ li {
     }
 }
 .animatef {
-    animation: fadeIn 0.5s forwards;
+    animation: fadeIn 0.9s forwards;
 }
 .animater {
-    animation: fadeOut 0.4s forwards;
+    animation: fadeOut 0.5s forwards;
 }
 
 
