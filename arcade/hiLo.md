@@ -2,7 +2,7 @@
 
 
 <html lang="en">
-
+<!-- basically adding in a stylesheet that allows for me to use different fonts and creating the title for the game. -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,7 @@
   <title>Hi-Lo Game</title>
 </head>
 
+<!-- Creates Div to overlay the main page, rulebook page -->
 <body onload="randomNum()">
 <div id="overlay">
   <h2>Hi-Lo Rules;</h2>
@@ -23,7 +24,8 @@
       <body>
         <button class= "button1" onclick="startgame()">
           15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"> to play
-          <span class="first"></span>
+          <!-- Inline element for button, makes it easier to style. -->
+          <span class="first"></span> 
           <span class="second"></span>
           <span class="third"></span>
           <span class="fourth"></span>
@@ -32,7 +34,8 @@
     </div>
   </div>
 </div>
-  <div class="mainContainer" id="mainContainer">
+<!-- creating main page/div for the game -->
+  <div class="mainContainer" id="mainContainer"> 
     <div class="vCenter">
       <h1 style="font-size: 32pt;">Hi-Lo</h1>
       <i class='fas fa-question-circle' id='theIcon'></i>
@@ -44,7 +47,7 @@
       <div id="congo" style="display: none;">
         <br>
         <h1 style="font-size: 71px; margin-top: -4%;" id="correctNum"></h1><br>
-        <h1 style="font-size: 16pt; margin-bottom: 4%;">🎉Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
+        <h1 style="font-size: 16pt; margin-bottom: 4%;">Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
         <input type="button" value="Play Again!" onclick="location.reload()" class="guessButton">
       </div>
       <br>
@@ -56,12 +59,14 @@
 </html>
 
 <style>
+
+  /*Token Icon for button*/
 .tokenicon {
     width: 28px;
     margin-top: -5px;
     vertical-align: middle;
 }
-
+/*Effects for the Icon*/
 #theIcon {
   font-size: 70px;
   margin: 4%;
@@ -83,11 +88,7 @@
 }
 
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
+/*CSS for the button itself*/
 button {
   border: none;
   padding: 20px 40px;
@@ -102,7 +103,7 @@ button {
   overflow: hidden;
   border-radius: 80px;
 }
-
+/* Enter hover effect for the drippy button */
 button:hover {
   color: #f1cc0c;
 }
@@ -110,7 +111,7 @@ span {
   transition: all 0.9s;
   z-index: -1;
 }
-
+/* Creates the transitional effect bringing in the yellow piece*/
 button .first {
   content: "";
   position: absolute;
@@ -173,7 +174,7 @@ button:hover .fourth {
 div.buttonSubmit input, div.buttonSubmit span {
   margin-left: 50px;
 }
-
+/* changes text size for rulebook */
 h2 {
   text-align: center;
   font-size: 40px;
@@ -182,7 +183,7 @@ h2 {
 li {
   font-size: 20px;
 }
-
+/*CSS for the ovelay div*/
 #overlay{
   border-radius: 20px;
   background-color: #302f2f;
@@ -192,6 +193,7 @@ li {
   width: 84.4%;
   padding: 5%;
 }
+/* css for the guess button on the bottom */
 .guessButton {
   margin: 2%;
   background-color: white;
@@ -202,7 +204,7 @@ li {
   border-radius: 3px;
   transition-duration: 0.3s;
 }
-
+/*this is the fade animation for the exit of the first div*/
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -226,18 +228,18 @@ li {
     animation: fadeOut 0.5s forwards;
 }
 
-
+/* font css */
 * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
+/* Css for the main div */
 .mainContainer {
   position: absolute;
   width: 94%;
   text-align: center;
 }
 
-
+/* CSS for font in the input button */
 .numInput {
   outline: none;
   margin: none 2% 2% 2%;
@@ -252,11 +254,11 @@ li {
   background-color: transparent;
   transition-duration: 0.3s;
 }
-
+/* when you click on the guess button it makes it white */
 .numInput:focus {
   border-color: white;
 }
-
+/* style for the guess button */
 .guessButton {
   margin: 2%;
   background-color: #f1cc0c;
@@ -269,14 +271,14 @@ li {
   border-radius: 3px;
   transition-duration: 0.3s;
 }
-
+/* makes the hover over the guess button white */
 .guessButton:hover {
   background-color: white;
 }
 
 </style>
 <script>
-
+// Gets rid of the rule page, shifts to main game page
 function startgame() {
   let div = document.getElementById("overlay");
   div.classList.add("animater");

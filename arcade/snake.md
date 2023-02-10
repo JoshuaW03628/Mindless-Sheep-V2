@@ -35,7 +35,7 @@
         position: absolute;
         width: 80%;
         height: 400px;
-        background-color: #202020;
+        background-color: #302f2f;;
         border-radius: 20px;
         padding: 10%;
         z-index: 99;
