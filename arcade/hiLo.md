@@ -174,7 +174,7 @@ button:hover .fourth {
 div.buttonSubmit input, div.buttonSubmit span {
   margin-left: 50px;
 }
-/* changes text size for rulebook */
+/* changes text size for rule-book */
 h2 {
   text-align: center;
   font-size: 40px;
@@ -183,7 +183,7 @@ h2 {
 li {
   font-size: 20px;
 }
-/*CSS for the ovelay div*/
+/*CSS for the overlay div*/
 #overlay{
   border-radius: 20px;
   background-color: #302f2f;
@@ -204,7 +204,7 @@ li {
   border-radius: 3px;
   transition-duration: 0.3s;
 }
-/*this is the fade animation for the exit of the first div*/
+/*this is the fade animation for the exit of the first div, Azeem showed me*/
 @keyframes fadeIn {
     from {
         opacity: 0;
