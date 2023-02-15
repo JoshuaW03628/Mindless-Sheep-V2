@@ -17,7 +17,7 @@
 <div id="overlay">
   <h2>Hi-Lo Rules;</h2>
   <li>Guess a number from 1-100, the an arrow will tell you wether the random number is higher or lower, you continue to guess based off of these clues until you guess the number.</li><br>
-  <li> Tokens: It costs 15 Tokens to play. You start off with 25 tokens in game and each guess you make takes away 1. So if you made 5 guesses you would earn 20 tokens.</li>
+  <li> Tokens: It costs 15 Tokens to play. You start off with 25 tokens in game and each guess you make takes away 1. So if you made 5 guesses you would earn 20 tokens - the original 15 you spent.</li>
 
   <div class="container">
     <div class="center">
