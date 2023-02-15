@@ -84,14 +84,14 @@
     <input type="password" class="login" id="pswdv" placeholder="Re-type Password" required>
     <div>
     <br>
-      <button id="enter" type="button" onclick="signUp()">Create Account</button>
+      <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Create Account</button>
       <div class="noacc">
        <p id="alracc">Already have an account?</p>
       </div>
       <button id="login" type="button" onclick="window.location.href='{{ site.baseurl }}/';">Log In</button>
     </div>
   </body>
-  <script src="{{ site.baseurl }}/arcade/api.js">
+  <script>
       // Get the input field
       var input = document.getElementById("pswdv");
       // Execute a function when the user presses a key on the keyboard
