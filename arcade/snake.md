@@ -15,7 +15,10 @@
         <p>You know how to play snake ;) <br> It costs <span style="color: #f1cc0c;">10 tokens</span> to play and your score is the number of tokens you earn. <br> (You need a score of 10 to break even) </p>
         <button type="button" class="startGame" id="start" value="" onclick="startGame()">Start Game for 10 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
     </div>
-    
+    <div id="endScreen">
+        <h2>Game Over</h2>
+        <button type="button" class="tryAgain" id="restart" value="" onclick="tryAgain()">Try Again</button>
+    </div>
     <canvas id="board"></canvas>
 </div>
 </body>
@@ -36,23 +39,29 @@
         position: absolute;
         width: 80%;
         height: 400px;
-        background-color: #302f2f;;
+        background-color: #302f2f;
         border-radius: 20px;
         padding: 10%;
         z-index: 99;
     }
-    #game-over {
+    #endScreen {
+        display: none;
         font-size: 16pt;
         position: absolute;
         width: 80%;
         height: 400px;
-        background-color: #302f2f;;
+        background-color: #302f2f;
         border-radius: 20px;
         padding: 10%;
-        z-index: 99;
+        z-index: 98;
     }
     h1 {
         font-size: 32pt;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    h2 {
+        font-size: 24pt;
         text-align: center;
         margin-bottom: 30px;
     }
@@ -78,6 +87,28 @@
         color: #242424;
         background-color: #f1cc0c;
     }
+    .tryAgain {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 30px;
+        position: inline;
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+        height: 100px;
+        margin-top: 100px;
+        margin-bottom: 200px;
+        border-radius: 8px;
+        background-color: #302f2f;
+        color: #f1cc0c;
+        border: none;
+        transition-duration: 0.3s;
+    }
+    .tryAgain:hover {
+        color: #242424;
+        background-color: #f1cc0c;
+    }
     .tokenicon {
         width: 28px;
         margin-top: -5px;
@@ -94,6 +125,17 @@
     .animater {
         animation: fadeOut 0.4s forwards;
     }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    .animatef {
+        animation: fadeIn 0.2s forwards;
+    }
 </style>
 
 <script>
@@ -107,13 +149,32 @@ function startGame() {
     }, 500);
 }
 
-function gameOver() {
-    let div = document.getElementById('game-over');
+function endGame() {
+    let div = document.getElementById('endScreen');
     div.style.display = "block";
+    div.classList.add('animatef');
+    setTimeout(function() {
+        div.style.display = "block";
+        div.classList.remove("animatef");
+    }, 200);
 }
 
-//score
-let score = 0;
+function tryAgain() {
+    startscreen = document.getElementById('startScreen');
+    endscreen = document.getElementById('endScreen');
+    endscreen.classList.add('animater')
+    setTimeout(function() {
+        endscreen.style.display = "none";
+        endscreen.classList.remove("animater");
+    }, 500);
+    startscreen.style.display = "block";
+    startscreen.classList.add('animatef')
+    setTimeout(function() {
+        startscreen.style.display = "block";
+        startscreen.classList.remove("animatef");
+    }, 200);
+}
+
 
 
 
@@ -156,12 +217,7 @@ window.onload = function() {
 
 }
 
-//draw score
-function.drawScore() {
-    ctx.fillStyle = "white";
-    ctx.font = "10px Verdana";
-    ctx.fillText("Score " + score, canvas.Width - 50, 10)
-}
+
 
 
 
@@ -194,19 +250,18 @@ function update() {
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
     for (let i = 0; i < snakeBody.length; i++) {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
-        score++; 
     }
 
     //game over conditions
     if (snakeX < 0 || snakeX > cols * blockSize || snakeY < 0 || snakeY > rows * blockSize) {
         gameOver = true;
-        alert("Game Over")
+        endGame()
     }
     
     for (let i = 0;  i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             gameOver = true;
-            alert("Game Over")
+            endGame()
         }
     }
 

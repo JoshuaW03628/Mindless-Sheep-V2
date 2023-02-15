@@ -91,7 +91,7 @@
       <button id="login" type="button" onclick="window.location.href='{{ site.baseurl }}/';">Log In</button>
     </div>
   </body>
-  <script>
+  <script src="../api.js">
       // Get the input field
       var input = document.getElementById("pswdv");
       // Execute a function when the user presses a key on the keyboard
