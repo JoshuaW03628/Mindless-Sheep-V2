@@ -21,20 +21,11 @@
         document.getElementById("scoredisplay").style.display = "none";
         document.getElementById("rules").style.display = "none";
         document.getElementById("tryagain").style.display = "none";
-        document.getElementsByClassName('progress-bar')[0].style.display = "none";
     }
-    function progbar() {
-        const progressBar = document.getElementsByClassName('progress-bar')[0]
-        const computedStyle = getComputedStyle(progressBar);
-        let id = setInterval(() => {
-            const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
-            progressBar.style.setProperty('--width', width + .027);
-            if (width >=100)
-                progressBar.style.setProperty('--width', 100);
-        });
-        const width = parseFloat(computedStyle.getPropertyValue('--width')) || 0;
-        if (width >=100)
-            clearInterval(id);
+    function progbarinit() {
+        const bar = document.getElementById('bar');
+        bar.style.display = 'block';
+        bar.classList.add('fill');
     }
     function countdown() {
         score = 0
@@ -59,15 +50,16 @@
                         document.getElementById("go").style.display = "none";
                         document.getElementById("circle").style.display = "block";
                         document.getElementById("scoredisplay").style.display = "block";
-                        document.getElementsByClassName('progress-bar')[0].style.display = "block";
-                        progbar()
-                        document.getElementsByClassName('progress-bar')[0].style.setProperty('--width', 0);
+                        progbarinit()
                         setTimeout(function() {
                             hidetargets();
                             document.getElementById("tryagain").style.display = "block";
                             document.getElementById("scoreend").style.display = "block";
                             document.getElementById("endspan").innerHTML = score;
                             document.getElementById("endTokens").innerHTML = score - 15 + " ";
+                            const bar = document.getElementById('bar');
+                            bar.classList.remove('fill');
+                            bar.style.display = 'none';
                         }, 15000);
                     }, 700);
                 }, 750);
@@ -80,39 +72,20 @@
     function gameplay() {
         var ding = new Audio('{{ site.baseurl }}imgs/ding.mp3');
         ding.play();
+        const circle = document.getElementById("circle");
         score = score + 1;
         width = generateRandomIntegerInRange(40, 130);
-        y = generateRandomIntegerInRange(500, 750);
+        y = generateRandomIntegerInRange(520, 750);
         x = generateRandomIntegerInRange(50, 780);
-        document.getElementById("circle").style.width = width + "px";
-        document.getElementById("circle").style.height = width + "px";
-        document.getElementById("circle").style.borderRadius = width / 2 + "px";
-        document.getElementById("circle").style.left = x/10 + "%";
-        document.getElementById("circle").style.top = y/10 + "%";
+        circle.style.width = width + "px";
+        circle.style.height = width + "px";
+        circle.style.borderRadius = width / 2 + "px";
+        circle.style.left = x/10 + "%";
+        circle.style.top = y/10 + "%";
         document.getElementById("scrdisp").innerHTML = score;
     }
     </script>
     <style>
-        .progress-bar {
-            position: absolute;
-            top: 780px;
-            left: 22px;
-            width: 645px;
-            height: 2em;
-            z-index: -1;
-            background-color: ;
-        }
-        .progress-bar::before {
-            content: '';
-            display: flex;
-            align-items: center;
-            position: absolute;
-            top: 1em;
-            bottom: 0em;
-            width: calc(var(--width, 0) * 1%);
-            max-width: 100%;
-            background-color: #f1cc0c;
-        }
         h1 {
             font-size: 32pt;
             text-align: center;
@@ -206,6 +179,35 @@
             text-align: center;
             background-color: #302f2f;
         }
+        .fill {
+            animation: fill 14.85s linear 1;
+        }
+        @keyframes fill {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+        .progress {
+            --bs-progress-height: 1.25rem;
+            --bs-progress-font-size: 0.75rem;
+            --bs-progress-bg: #f1cc0c;
+            --bs-progress-bar-bg: #f1cc0c;
+            --bs-progress-bar-transition: width 0.6s ease;
+            margin-bottom: 20px;
+            position: relative;
+            top: 10px;
+            display: none;
+            height: var(--bs-progress-height);
+            border-radius: 7px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            overflow: hidden;
+            font-size: var(--bs-progress-font-size);
+            background-color: var(--bs-progress-bg);
+        }
     </style>
     <h1>Reaction Time</h1>
     <div id="outer">
@@ -213,6 +215,7 @@
             <h2 style="font-size: 20pt; margin-bottom: 20px;">Rules</h2>
             <p style="font-size: 12pt;">You have 15 seconds to click as many targets as you can. <br><br> Your score = the tokens you earn (need 15 to break even!)</p>
         </div>
+        <div class="progress" id="bar"></div>
         <p class="scoreDisplay" id="scoredisplay">Score: <span id="scrdisp" style="color: #f1cc0c;">0</span></p>
         <button type="button" class="playnow" id="playnow" value="" onclick="countdown()">Start Game for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
         <p class="countdown" id="3">3</p>
@@ -220,10 +223,9 @@
         <p class="countdown" id="1">1</p>
         <p class="countdown" id="go">GO</p>
         <div class="circle" id="circle" onclick="gameplay()"></div>
-        <div class="progress-bar" style="--width: 0"></div>
         <p class="scoreDisplay" id="scoreend">Congratulations! Your score was <span id="endspan" style="color: #f1cc0c"></span><br><br>You earned <span id="endTokens" style="color: #f1cc0c"></span><img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></p>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <button type="button" class="playnow" id="tryagain" value="" onclick="countdown()">Try again for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
     </div>
-    
 </body>
 </html>
