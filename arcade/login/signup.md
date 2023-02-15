@@ -86,7 +86,7 @@
     <br>
       <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Create Account</button>
       <div class="noacc">
-       <p id="alracc">Already have an account?</p>
+       <p id="alracc">Already have an account?</p>5g 
       </div>
       <button id="login" type="button" onclick="window.location.href='{{ site.baseurl }}/';">Log In</button>
     </div>
