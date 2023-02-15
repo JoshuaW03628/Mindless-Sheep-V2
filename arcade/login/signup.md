@@ -88,7 +88,7 @@
       <div class="noacc">
        <p id="alracc">Already have an account?</p>
       </div>
-      <button id="login" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/login/login';">Log In</button>
+      <button id="login" type="button" onclick="window.location.href='{{ site.baseurl }}/';">Log In</button>
     </div>
   </body>
   <script>
