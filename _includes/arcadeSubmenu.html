@@ -1,12 +1,41 @@
 <table style="margin-top: -30px;">
     <tr style="text-align: center; vertical-align: middle;">
-        <td><a href="{{ site.baseurl }}/">Log Out</a></td>
+        <td><a href="{{ site.baseurl }}/" onclick="localStorage.clear()">Log Out</a></td>
         <td><a href="{{ site.baseurl }}/arcade/account">Account</a></td>
         <td><a href="{{ site.baseurl }}/arcade/reactionTime">Reaction Time</a></td>
         <td><a href="{{ site.baseurl }}/arcade/pong">Pong</a></td>
         <td><a href="{{ site.baseurl }}/arcade/snake">Snake</a></td>
         <td><a href="{{ site.baseurl }}/arcade/hiLo">Hi-Lo</a></td>
         <td><a href="{{ site.baseurl }}/arcade/leaderboard">Leaderboard</a></td>
-        <td><span id="tokenCount">23</span> <img src="{{ site.baseurl }}/images/AJToken_60x60.png" style="display: inline; width: 18px; vertical-align:middle;"></td>
+        <td><span id="tokenCount">0</span> <img src="{{ site.baseurl }}/images/AJToken_60x60.png" style="display: inline; width: 18px; vertical-align:middle;"></td>
     </tr>
 </table>
+<script>
+    // setting a placeholder for token amount
+    let tok = 1;
+    // function that updates the token amount (database implementation needed)
+    function tokenDisp() {
+        // identify where the tokens must be displayed
+        let elem = document.getElementById('tokenCount');
+
+        // identify which user to access
+        let currentUser = localStorage.getItem('currentUser');
+
+        // Read the database
+
+        // *NOTE* I STILL NEED TO FIGURE OUT HOW TO ACCESS THE USER'S TOKEN AMOUNT (dealing with promises, etc...)
+
+        /* fetch('https://ajarcade.duckdns.org/api/players/')
+        .then(res => res.json())
+        .then(data => console.log(data)) */
+
+        elem.textContent = tok;
+        console.log('Updated tokens ' + tok + ' time(s)')
+        // Placeholder incrementing to show that the loop works
+        tok++;
+    };
+
+    // update the token amount every 'x' seconds
+    let x = 1;
+    const updateLoop = setInterval("tokenDisp()", (x*1000))
+</script>
