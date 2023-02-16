@@ -194,6 +194,8 @@
             animation: fadeOut 0.4s forwards;
         }
     </style>
+    <script src="{{ site.baseurl }}/arcade/api.js">
+    </script>
     <script>
         function openFormDel() {
             form = document.getElementById("del")
@@ -219,21 +221,40 @@
                 form2.classList.remove("animater");
             }, 400);
         }
+        function delAcc() {
+            let inp = document.getElementById('userid').value;
+            fetch('https://ajarcade.duckdns.org/api/players/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "uid": inp
+                })  
+                }).then(res => {
+                return res.json()
+                })
+                .then(data => console.log(data))
+                .catch(error => console.log('ERROR'))
+            setTimeout(function() {
+                window.location.replace("/login/signup");
+            }, 200);
+        }
     </script>  
 </head>
-<body>
+<body onload="showUID()">
     <div class="wrapper2">
         <h1>Account Information</h1>
         <h2 class="name">Name</h2>
-        <p>Willy Wonka</p>
+        <p id="nameFull">Willy Wonka</p>
         <h2 class="uid">User ID</h2>
-        <p>willyW-123</p>
+        <p id="usernameID">willyW-123</p>
         <button class="cancel" onclick="openFormPwd()">Change Password</button>
         <button class="btn" onclick="openFormDel()">Delete Account</button>
         <div class="del" id="del">
             <form class="form-container">
                 <h2>Delete Account</h2>
-                <input type="text" placeholder="Please enter your User ID" required>
+                <input type="text" id="userid" placeholder="Please enter your User ID" required>
                 <p class="warning"><b>WARNING!</b> By clicking `delete`, you are removing your account from our system. Your tokens will NOT be saved and cannot be replenished!</p>
                 <button type="button" class="btn delbtn" onclick="delAcc()">Delete</button>
                 <button type="button" class="cancel" onclick="closeFormDel()">Cancel</button>
