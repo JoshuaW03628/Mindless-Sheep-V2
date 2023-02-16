@@ -246,9 +246,9 @@
     <div class="wrapper2">
         <h1>Account Information</h1>
         <h2 class="name">Name</h2>
-        <p id="nameFull">Willy Wonka</p>
+        <p id="nameFull"></p>
         <h2 class="uid">User ID</h2>
-        <p id="usernameID">willyW-123</p>
+        <p id="usernameID"></p>
         <button class="cancel" onclick="openFormPwd()">Change Password</button>
         <button class="btn" onclick="openFormDel()">Delete Account</button>
         <div class="del" id="del">
