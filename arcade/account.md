@@ -237,7 +237,7 @@
                 .then(data => console.log(data))
                 .catch(error => console.log('ERROR'))
             setTimeout(function() {
-                window.location.replace("/login/signup");
+                window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
             }, 200);
         }
     </script>  
