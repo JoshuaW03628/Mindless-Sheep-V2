@@ -29,8 +29,8 @@
     }
     function countdown() {
         score = 0
-        var audio = new Audio('{{ site.baseurl }}imgs/countdown.mp3');
-        var audio2 = new Audio('{{ site.baseurl }}imgs/go.mp3')
+        var audio = new Audio('{{ site.baseurl }}/arcade/imgs/countdown.mp3');
+        var audio2 = new Audio('{{ site.baseurl }}/arcade/imgs/go.mp3')
         hidetargets();
         audio.play();
         document.getElementById("3").style.display = "block";
@@ -70,7 +70,7 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     function gameplay() {
-        var ding = new Audio('{{ site.baseurl }}imgs/ding.mp3');
+        var ding = new Audio('{{ site.baseurl }}/arcade/imgs/ding.mp3');
         ding.play();
         const circle = document.getElementById("circle");
         score = score + 1;
