@@ -7,12 +7,10 @@
         <td><a href="{{ site.baseurl }}/arcade/snake">Snake</a></td>
         <td><a href="{{ site.baseurl }}/arcade/hiLo">Hi-Lo</a></td>
         <td><a href="{{ site.baseurl }}/arcade/leaderboard">Leaderboard</a></td>
-        <td><span id="tokenCount">0</span> <img src="{{ site.baseurl }}/images/AJToken_60x60.png" style="display: inline; width: 18px; vertical-align:middle;"></td>
+        <td><span id="tokenCount">loading...</span> <img src="{{ site.baseurl }}/images/AJToken_60x60.png" style="display: inline; width: 18px; vertical-align:middle;"></td>
     </tr>
 </table>
 <script>
-    // setting a placeholder for token amount
-    let tok = 1;
     // function that updates the token amount (database implementation needed)
     function tokenDisp() {
         // identify where the tokens must be displayed
@@ -22,17 +20,25 @@
         let currentUser = localStorage.getItem('currentUser');
 
         // Read the database
-
-        // *NOTE* I STILL NEED TO FIGURE OUT HOW TO ACCESS THE USER'S TOKEN AMOUNT (dealing with promises, etc...)
-
-        /* fetch('https://ajarcade.duckdns.org/api/players/')
-        .then(res => res.json())
-        .then(data => console.log(data)) */
-
-        elem.textContent = tok;
-        console.log('Updated tokens ' + tok + ' time(s)')
-        // Placeholder incrementing to show that the loop works
-        tok++;
+        fetch('https://ajarcade.duckdns.org/api/players/')
+            .then(response => {
+                // trap error response from Web API
+                if (response.status !== 200) {
+                    const message = 'Fetch error: ' + response.status + " " + response.statusText;
+                    alert(message);
+                    return;
+                }
+                // Valid response will contain json data
+                response.json().then(data => {
+                    // iterate through the whole database and find a record that matches the uid
+                    for (i in data) {
+                        if (data[i].uid == currentUser) {
+                            const tokenAmt = data[i].tokens;
+                            elem.textContent = tokenAmt;
+                        }
+                    }
+                })
+            })
     };
 
     // update the token amount every 'x' seconds

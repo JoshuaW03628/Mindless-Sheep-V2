@@ -9,63 +9,144 @@
 </head>
 <body>
     <script>
+    // updates local storage with accurate token amount based upon which user is signed in
+    function getTokens() {
+        const id = localStorage.getItem('currentUser');
+        fetch('https://ajarcade.duckdns.org/api/players/')
+            .then(response => {
+                // trap error response from Web API
+                if (response.status !== 200) {
+                    const message = 'Fetch error: ' + response.status + " " + response.statusText;
+                    alert(message);
+                    return;
+                }
+                // Valid response will contain json data
+                response.json().then(data => {
+                    // iterate through the whole database and find a record that matches the uid
+                    for (i in data) {
+                        if (data[i].uid == id) {
+                            localStorage.setItem('tokenAmt', data[i].tokens);
+                        }
+                    }
+                })
+            })
+    }
+    // removes 'amt' tokens from the user's tokens attribute
+    function remTokens(amt) {
+        const id = localStorage.getItem('currentUser');
+        // update the user's token amount
+        getTokens();
+        var tokenAmt = localStorage.getItem('tokenAmt');
+        newAmt = tokenAmt-amt;
+        fetch('https://ajarcade.duckdns.org/api/players/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "uid": id,
+                "data": {"tokens": newAmt}
+            })
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(data => console.log(data))
+        setTimeout(function() {
+            getTokens();
+        }, 500);
+    }
+    // adds 'score' tokens to the user's tokens attribute (called after the game is over)
+    function addTokens(score) {
+        const id = localStorage.getItem('currentUser');
+        // update the user's token amount
+        getTokens();
+        tokenAmt = localStorage.getItem('tokenAmt');
+        newAmt = parseFloat(tokenAmt) + parseFloat(score);
+        fetch('https://ajarcade.duckdns.org/api/players/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "uid": id,
+                "data": {"tokens": newAmt}
+            })
+            }).then(res => {
+            return res.json()
+            })
+            .then(data => console.log(data))
+        setTimeout(function() {
+            getTokens();
+        }, 500);
+    }
     var score = 0;
+    // general function to get rid of all the elements in the game window
     function hidetargets() {
         document.getElementById("circle").style.display = "none";
-        document.getElementById("go").style.display = "none";
-        document.getElementById("3").style.display = "none";
-        document.getElementById("2").style.display = "none";
-        document.getElementById("1").style.display = "none";
+        document.getElementById("cd").style.display = "none";
         document.getElementById("playnow").style.display = "none";
         document.getElementById("scoreend").style.display = "none";
         document.getElementById("scoredisplay").style.display = "none";
         document.getElementById("rules").style.display = "none";
         document.getElementById("tryagain").style.display = "none";
     }
+    // Initializes the progress bar
     function progbarinit() {
         const bar = document.getElementById('bar');
         bar.style.display = 'block';
         bar.classList.add('fill');
     }
+    // Starts the game
     function countdown() {
+        remTokens(15)
         score = 0
+        document.getElementById("scrdisp").innerHTML = score;
         var audio = new Audio('{{ site.baseurl }}/arcade/imgs/countdown.mp3');
         var audio2 = new Audio('{{ site.baseurl }}/arcade/imgs/go.mp3')
         hidetargets();
         audio.play();
-        document.getElementById("3").style.display = "block";
+        document.getElementById("cd").innerHTML = '3';
+        document.getElementById("cd").style.display = "block";
         setTimeout(function() {
             audio.play();
-            document.getElementById("3").style.display = "none";
-            document.getElementById("2").style.display = "block";
+            document.getElementById("cd").innerHTML = '2';
             setTimeout(function() {
                 audio.play();
-                document.getElementById("2").style.display = "none";
-                document.getElementById("1").style.display = "block";
+                document.getElementById("cd").innerHTML = '1';
                     setTimeout(function() {
                     audio2.play();
-                    document.getElementById("1").style.display = "none";
-                    document.getElementById("go").style.display = "block";
+                    document.getElementById("cd").innerHTML = 'GO';
                     setTimeout(function() {
-                        document.getElementById("go").style.display = "none";
+                        // hide countdown
+                        document.getElementById("cd").style.display = "none";
+                        // show game elements
                         document.getElementById("circle").style.display = "block";
                         document.getElementById("scoredisplay").style.display = "block";
+                        // reset progress bar
                         progbarinit()
+                        // The next timeout ends the game after 15 seconds
                         setTimeout(function() {
                             hidetargets();
+                            // show end screen elements
                             document.getElementById("tryagain").style.display = "block";
                             document.getElementById("scoreend").style.display = "block";
+                            // display stats
                             document.getElementById("endspan").innerHTML = score;
                             document.getElementById("endTokens").innerHTML = score - 15 + " ";
+                            // remove progress bar from end screen
                             const bar = document.getElementById('bar');
                             bar.classList.remove('fill');
                             bar.style.display = 'none';
+                            // update tokens in database
+                            addTokens(score);
                         }, 15000);
                     }, 700);
                 }, 750);
             }, 750);
         }, 750);
     }
+    // generates a random # between two values
     function generateRandomIntegerInRange(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -218,10 +299,7 @@
         <div class="progress" id="bar"></div>
         <p class="scoreDisplay" id="scoredisplay">Score: <span id="scrdisp" style="color: #f1cc0c;">0</span></p>
         <button type="button" class="playnow" id="playnow" value="" onclick="countdown()">Start Game for 15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
-        <p class="countdown" id="3">3</p>
-        <p class="countdown" id="2">2</p>
-        <p class="countdown" id="1">1</p>
-        <p class="countdown" id="go">GO</p>
+        <p class="countdown" id="cd">3</p>
         <div class="circle" id="circle" onclick="gameplay()"></div>
         <p class="scoreDisplay" id="scoreend">Congratulations! Your score was <span id="endspan" style="color: #f1cc0c"></span><br><br>You earned <span id="endTokens" style="color: #f1cc0c"></span><img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></p>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

@@ -4,6 +4,7 @@ function signUp() {
     let userid = document.getElementById('usrnm').value;
     // store uid locally to be able to access the user's info around the arcade
     localStorage.setItem("currentUser", userid);
+    localStorage.setItem("tokenAmt", 20);
     let nm = document.getElementById('name').value;
     let pwd = document.getElementById('pswd').value;
     let pw2 = document.getElementById('pswdv').value;
@@ -53,10 +54,11 @@ function getType(p) {
     else return 'other';
 }
 
-function showUID() {
+function showUserInfo() {
+    // current user's uid was saved locally from signup page
     const id = localStorage.getItem('currentUser');
-    let nameField = document.getElementById('nameFull');
-    let idField = document.getElementById('usernameID');
+    const nameField = document.getElementById('nameFull');
+    const idField = document.getElementById('usernameID');
     // fetch info from db
     fetch('https://ajarcade.duckdns.org/api/players/')
     .then(response => {
@@ -68,6 +70,7 @@ function showUID() {
         }
         // Valid response will contain json data
         response.json().then(data => {
+            // iterate through the whole database and find a record that matches the uid
             for (i in data) {
                 if (data[i].uid == id) {
                     const uidDisp = data[i].uid;

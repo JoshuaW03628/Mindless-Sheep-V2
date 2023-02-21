@@ -242,7 +242,7 @@
         }
     </script>  
 </head>
-<body onload="showUID()">
+<body onload="showUserInfo()">
     <div class="wrapper2">
         <h1>Account Information</h1>
         <h2 class="name">Name</h2>
