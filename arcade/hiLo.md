@@ -47,7 +47,7 @@
       <div id="congo" style="display: none;">
         <br>
         <h1 style="font-size: 71px; margin-top: -4%;" id="correctNum"></h1><br>
-        <h1 style="font-size: 16pt; margin-bottom: 4%;">Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
+        <h1 style="font-size: 16pt; margin-bottom: 4%;">Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br><br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens! <br><br> That's a profit of <b id="profit" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
         <input type="button" value="Play Again!" onclick="location.reload()" class="guessButton">
       </div>
       <br>
@@ -278,6 +278,77 @@ li {
 
 </style>
 <script>
+    // updates local storage with accurate token amount based upon which user is signed in
+    function getTokens() {
+        const id = localStorage.getItem('currentUser');
+        fetch('https://ajarcade.duckdns.org/api/players/')
+            .then(response => {
+                // trap error response from Web API
+                if (response.status !== 200) {
+                    const message = 'Fetch error: ' + response.status + " " + response.statusText;
+                    alert(message);
+                    return;
+                }
+                // Valid response will contain json data
+                response.json().then(data => {
+                    // iterate through the whole database and find a record that matches the uid
+                    for (i in data) {
+                        if (data[i].uid == id) {
+                            localStorage.setItem('tokenAmt', data[i].tokens);
+                        }
+                    }
+                })
+            })
+    }
+    // removes 'amt' tokens from the user's tokens attribute
+    function remTokens(amt) {
+        const id = localStorage.getItem('currentUser');
+        // update the user's token amount
+        getTokens();
+        var tokenAmt = localStorage.getItem('tokenAmt');
+        newAmt = tokenAmt-amt;
+        fetch('https://ajarcade.duckdns.org/api/players/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "uid": id,
+                "data": {"tokens": newAmt}
+            })
+        })
+            .then(res => {
+                return res.json()
+            })
+            .then(data => console.log(data))
+        setTimeout(function() {
+            getTokens();
+        }, 500);
+    }
+    // adds 'score' tokens to the user's tokens attribute (called after the game is over)
+    function addTokens(score) {
+        const id = localStorage.getItem('currentUser');
+        // update the user's token amount
+        getTokens();
+        tokenAmt = localStorage.getItem('tokenAmt');
+        newAmt = parseFloat(tokenAmt) + parseFloat(score);
+        fetch('https://ajarcade.duckdns.org/api/players/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "uid": id,
+                "data": {"tokens": newAmt}
+            })
+            }).then(res => {
+            return res.json()
+            })
+            .then(data => console.log(data))
+        setTimeout(function() {
+            getTokens();
+        }, 500);
+    }
 // Gets rid of the rule page, shifts to main game page
 function startgame() {
   let div = document.getElementById("overlay");
@@ -286,6 +357,8 @@ function startgame() {
     div.style.display = "none";
     div.classList.remove("animater");
   }, 500);
+  // Charges the user 15 tokens to play
+  remTokens(15);
 }
 
 var theNum = 0;
@@ -312,20 +385,24 @@ input.addEventListener("keyup", function (event) {
 function guessNum() {
   counter++;
   tokens=25-counter;
+  profit=tokens-15;
   document.getElementById("counter2").innerHTML = counter;
   document.getElementById("counter").innerHTML = counter;
   document.getElementById("tokens").innerHTML = tokens;
+  document.getElementById("profit").innerHTML = profit;
   var numIn = document.getElementById("numInput").value;
   if (numIn > theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-down";
   } else if (numIn < theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-up";
   } else if (numIn == theNum) {
+    addTokens(tokens)
     document.getElementById("theIcon").className = "fas fa-check-circle";
     document.getElementById("theGuessing").style.display = "none";
     document.getElementById("correctNum").innerHTML = theNum;
     document.getElementById("guessssses").style.display = "none";
     document.getElementById("congo").style.display = "block";
+
   }
   document.getElementById("numInput").value = "";
 }
