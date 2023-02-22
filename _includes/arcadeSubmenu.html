@@ -34,7 +34,16 @@
                     for (i in data) {
                         if (data[i].uid == currentUser) {
                             const tokenAmt = data[i].tokens;
-                            elem.textContent = tokenAmt;
+                            const tokenAmtA = Math.abs(tokenAmt);
+                            if (tokenAmt > 0) {
+                                elem.textContent = tokenAmt;
+                            }
+                            else if (tokenAmt < 0) {
+                                elem.textContent = "In debt " + tokenAmtA;
+                            }
+                            else {
+                                elem.textContent = "You're broke";
+                            }
                         }
                     }
                 })

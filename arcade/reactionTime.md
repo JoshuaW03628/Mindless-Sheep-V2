@@ -104,6 +104,7 @@
         document.getElementById("scrdisp").innerHTML = score;
         var audio = new Audio('{{ site.baseurl }}/arcade/imgs/countdown.mp3');
         var audio2 = new Audio('{{ site.baseurl }}/arcade/imgs/go.mp3')
+        var audio3 = new Audio('{{ site.baseurl }}/arcade/imgs/gameover.mp3')
         hidetargets();
         audio.play();
         document.getElementById("cd").innerHTML = '3';
@@ -127,6 +128,7 @@
                         progbarinit()
                         // The next timeout ends the game after 15 seconds
                         setTimeout(function() {
+                            audio3.play();
                             hidetargets();
                             // show end screen elements
                             document.getElementById("tryagain").style.display = "block";
@@ -223,6 +225,7 @@
         }
         #tryagain {
             display: none;
+            margin-top: 12%;
         }
         #scoredisplay {
             display: none;
@@ -247,6 +250,8 @@
             border-radius: 15px;
             background-color: #3b3a3a;
             padding: 25px;
+            padding-top: 24%;
+            padding-bottom: 24%;
         }
         .tokenicon {
             width: 28px;
