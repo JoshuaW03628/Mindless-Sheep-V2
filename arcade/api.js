@@ -8,41 +8,80 @@ function signUp() {
     let nm = document.getElementById('name').value;
     let pwd = document.getElementById('pswd').value;
     let pw2 = document.getElementById('pswdv').value;
-    // idiot-proofing
-    if (pwd === "") {
-        document.getElementById('pswd').placeholder = "Please Enter A Password";
-        document.getElementById('pswd').style.borderBottomColor = "red";
-    }
-    else if (pw2 == pwd) {
-        // posting to database
-        fetch('https://ajarcade.duckdns.org/api/players/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "id": null,
-                "name": nm,
-                "password": pwd,
-                "tokens": 20,
-                "uid": userid
-            })  
-            }).then(res => {
-            return res.json()
-            })
-            .then(data => console.log(data))
-            .catch(error => console.log('ERROR'))
-        // redirecting to account page
-        setTimeout(function() {
-            window.location.replace("../account");
-        }, 600);
-    }
-    else {
+
+    fetch('https://ajarcade.duckdns.org/api/players/')
+    .then(response => {
+        // trap error response from Web API
+        if (response.status !== 200) {
+            const message = 'Error: ' + response.status + " " + response.statusText;
+            alert(message);
+            return;
+        }
+        // Valid response will contain json data
+        response.json().then(data => {
+            // iterate through the whole database and find if there are any duplicate uids
+            for (i in data) {
+                if (data[i].uid == userid) {
+                    localStorage.setItem('uidStatus', true)
+                }
+                else {
+                    localStorage.setItem('uidStatus', false)
+                }
+            }
+        })
+    })
+    setTimeout(function() {
+        let uidStatus = localStorage.getItem('uidStatus')
+        console.log(uidStatus)
+        // tells user if they have a duplicate uid
+        if (uidStatus != 'false') {
+            console.log('activated')
+            const field = document.getElementById('usrnm');
+            field.value = "";
+            field.setAttribute('placeholder', 'That username is taken');
+            field.style.borderBottomColor = "red";
+        }
+        // idiot proofing the name field
+        else if (nm === "") {
+            document.getElementById('name').placeholder = "Please Enter Your Full Name";
+            document.getElementById('name').style.borderBottomColor = "red";
+        }
+        // idiot-proofing
+        else if (pwd === "") {
+            document.getElementById('pswd').placeholder = "Please Enter A Password";
+            document.getElementById('pswd').style.borderBottomColor = "red";
+        }
         // more idiot-proofing
-        document.getElementById('pswdv').value = "";
-        document.getElementById('pswdv').placeholder = "Passwords don't match";
-        document.getElementById('pswdv').style.borderBottomColor = "red";
-    }
+        else if (pw2 != pwd) {
+            document.getElementById('pswdv').value = "";
+            document.getElementById('pswdv').placeholder = "Passwords don't match";
+            document.getElementById('pswdv').style.borderBottomColor = "red";
+        }
+        else {
+            // posting to database
+            fetch('https://ajarcade.duckdns.org/api/players/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "id": null,
+                    "name": nm,
+                    "password": pwd,
+                    "tokens": 20,
+                    "uid": userid
+                })  
+                }).then(res => {
+                return res.json()
+                })
+                .then(data => console.log(data))
+                .catch(error => console.log('ERROR'))
+            // redirecting to account page
+            setTimeout(function() {
+                window.location.replace("../account");
+            }, 600);
+        }
+    }, 600);
 }
 
 
