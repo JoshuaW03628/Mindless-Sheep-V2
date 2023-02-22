@@ -17,13 +17,13 @@
 <div id="overlay">
   <h2>Hi-Lo Rules;</h2>
   <li>Guess a number from 1-100, the an arrow will tell you wether the random number is higher or lower, you continue to guess based off of these clues until you guess the number.</li><br>
-  <li> Tokens: It costs 15 Tokens to play. You start off with 25 tokens in game and each guess you make takes away 1. So if you made 5 guesses you would earn 20 tokens - the original 15 you spent.</li>
+  <li> Tokens: It costs 10 Tokens to play. You start off with 25 tokens in game and each guess you make takes away 1. So if you made 5 guesses you would earn 20 tokens - the original 10 you spent, so a net 10 token profit.</li>
 
   <div class="container">
     <div class="center">
       <body>
         <button class= "button1" onclick="startgame()">
-          15 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"> to play
+          10 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"> to play
           <!-- Inline element for button, makes it easier to style. -->
           <span class="first"></span> 
           <span class="second"></span>
@@ -47,7 +47,7 @@
       <div id="congo" style="display: none;">
         <br>
         <h1 style="font-size: 71px; margin-top: -4%;" id="correctNum"></h1><br>
-        <h1 style="font-size: 16pt; margin-bottom: 4%;">Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br><br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens! <br><br> That's a profit of <b id="profit" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
+        <h1 style="font-size: 16pt; margin-bottom: 4%;">Congratulations! You guessed correct number in <b id="counter" style="font-size: 16pt;"></b> guesses <br><br> You earned <b id="tokens" style="font-size: 18pt; color: #f1cc0c;"></b> tokens! <br><br> That's a net profit of <b id="profit" style="font-size: 18pt; color: #f1cc0c;"></b> tokens!</h1>
         <input type="button" value="Play Again!" onclick="location.reload()" class="guessButton">
       </div>
       <br>
@@ -357,8 +357,8 @@ function startgame() {
     div.style.display = "none";
     div.classList.remove("animater");
   }, 500);
-  // Charges the user 15 tokens to play
-  remTokens(15);
+  // Charges the user 10 tokens to play
+  remTokens(10);
 }
 
 var theNum = 0;
@@ -385,7 +385,7 @@ input.addEventListener("keyup", function (event) {
 function guessNum() {
   counter++;
   tokens=25-counter;
-  profit=tokens-15;
+  profit=tokens-10;
   document.getElementById("counter2").innerHTML = counter;
   document.getElementById("counter").innerHTML = counter;
   document.getElementById("tokens").innerHTML = tokens;
