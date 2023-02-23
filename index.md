@@ -120,11 +120,11 @@
         res.json().then(data => {
           localStorage.setItem("currentUser", data.uid);
           console.log("Success! Welcome user: " + localStorage.getItem('currentUser') + ", name: " + data.name)
+          setTimeout(function() {
+            window.location.replace("https://azeem-khan1.github.io/TripleAJv3/arcade/account");
+          }, 500);
         })
       })
-    setTimeout(function() {
-      window.location.replace("https://azeem-khan1.github.io/TripleAJv3/arcade/account");
-    }, 400);
   }
   // Get the input field
   var input = document.getElementById("pswd");
