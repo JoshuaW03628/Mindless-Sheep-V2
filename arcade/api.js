@@ -65,7 +65,6 @@ function signUp() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "id": null,
                     "name": nm,
                     "password": pwd,
                     "tokens": 20,
