@@ -98,6 +98,7 @@
     <canvas id="pong" width="600" height="400"></canvas>
 </div>
 <script>
+// gets the amount of tokens the user has
 function getTokens() {
     const id = localStorage.getItem('currentUser');
     fetch('https://ajarcade.duckdns.org/api/players/')
@@ -119,7 +120,7 @@ function getTokens() {
             })
         })
 }
-// removes 'amt' tokens from the user's tokens attribute
+// removes 'amt' tokens from the user's tokens attribute (in this case, amt = 10)
 function remTokens(amt) {
     const id = localStorage.getItem('currentUser');
     // update the user's token amount
@@ -144,7 +145,7 @@ function remTokens(amt) {
         getTokens();
     }, 500);
 }
-// adds 'score' tokens to the user's tokens attribute (called after the game is over)
+// adds 'amt' tokens to the user's tokens attribute (called after the game is over and only if user won) (In this case, amt = 25)
 function addTokens(amt) {
     const id = localStorage.getItem('currentUser');
     // update the user's token amount
@@ -269,6 +270,7 @@ function collision(b,p){
 }
 // update function, the function that does all calculations
 function update(){
+    // Establishes a key/value pair to store in local storage
     localStorage.setItem('pongStatus', null)
     // change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
     if( ball.x - ball.radius < 0 ){
@@ -276,9 +278,11 @@ function update(){
         comScore.play();
         resetBall();
         if (com.score > 6) {
+            // We can use this item to tell who won the game (false = computer won, and vice versa)
             localStorage.setItem('pongStatus', 'false');
         }
         else {
+            // We don't want to edit local storage if the game isn't really over
             localStorage.setItem('pongStatus', null);
         }
     }
@@ -287,9 +291,11 @@ function update(){
         userScore.play();
         resetBall();
         if (user.score > 6) {
+            // We can use this item to tell who won the game (true = user won, and vice versa)
             localStorage.setItem('pongStatus', 'true');
         }
         else {
+            // We don't want to edit local storage if the game isn't really over
             localStorage.setItem('pongStatus', null);
         }
     }
@@ -347,35 +353,55 @@ function render(){
 }
 // number of frames per second
 let framePerSecond = 50;
-//Hide start screen and call the game function 50 times every 1 Sec
+// Declare a global variable for 'loop'. This will contain the gameloop and make it accessible to game() in order to stop the gameloop when the game is over
 var loop = null
+//Hide start screen and call the game function 50 times every 1 Sec; save the gameloop to global variable 'loop'
 function startGame() {
     let div = document.getElementById('startScreen')
+    // starts animation to fade out the start screen
     div.classList.add('animater')
+    // Re-assign loop to be the actual gameloop
     loop = setInterval(game,1000/framePerSecond)
+    // Tells the program how many tokens the user currently has
     getTokens()
+    // Takes away a cost of 10 tokens from the user's balance
     remTokens(10)
+    // Reset the start screen
     setTimeout(function() {
         div.style.display = "none";
         div.classList.remove("animater");
     }, 500);
 }
+// This thing makes the game work (tells the game how to handle when the ball hits a wall, paddle, when someone scores, etc...)
 function game(){
     update();
     render();
+    // Declaring variables to HTML elements for ease-of-use
     const endscreen = document.getElementById('endScreen');
     const endtext = document.getElementById('endText');
+    // local storage will tell us who wins. See definition of update() above. (pongStatus => true means user won, and false means computer won.)
     if (localStorage.getItem('pongStatus') === 'true') {
+        // This is saying if the user won^^, then...
+        // Stop the game
         clearInterval(loop)
+        // add 25 tokens to the user's balance (this will come out to a net 15 tokens gained after paying 10 tokens)
         addTokens(25)
+        // Save the new number of tokens to local storage
         getTokens()
+        // Make the end screen visible
         endscreen.style.display = 'block'
+        // Write text on end screen
         endtext.innerHTML = 'You won! :) <br> Congrats on earning 15 tokens!'
     }
     if (localStorage.getItem('pongStatus') === 'false') {
+        // This is saying if the computer won^^, then...
+        // Stop the game
         clearInterval(loop)
+        // Make the end screen visible
         endscreen.style.display = 'block'
+        // Write text on end screen
         endtext.innerHTML = 'You lost :( <br> 10 tokens down the drain';
+        // NOTE: we don't reward the user tokens if they lose! (aka they wasted 10 tokens)
     }
 }
 </script>
