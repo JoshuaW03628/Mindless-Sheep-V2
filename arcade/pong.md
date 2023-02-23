@@ -23,6 +23,18 @@
             padding: 10%;
             z-index: 99;
         }
+        #endScreen {
+            display: none;
+            text-align: center;
+            font-size: 13.5pt;
+            position: absolute;
+            width: 74.5%;
+            height: 400px;
+            background-color: #202020;
+            border-radius: 20px;
+            padding: 10%;
+            z-index: 99;
+        }
         .startGame {
             outline: none;
             -webkit-tap-highlight-color: transparent;
@@ -76,12 +88,86 @@
 <div class="outer">
     <h1>Pong</h1>
     <div id="startScreen">
-        <p>This game costs <span style="color: #f1cc0c;">10 tokens</span> to play. <br> First to 7 points wins. If you win, you earn <span style="color: #f1cc0c;">20 tokens</span> (<span style="color: #f1cc0c;">10 token</span> profit). <br> User paddle is on the left. AI paddle is on the right. <br> Control your paddle with mouse movements up and down in the yellow box!</p>
+        <p>This game costs <span style="color: #f1cc0c;">10 tokens</span> to play. <br> First to 7 points wins. If you win, you earn <span style="color: #f1cc0c;">25 tokens</span> (<span style="color: #f1cc0c;">15 token</span> profit). <br> User paddle is on the left. AI paddle is on the right. <br> Control your paddle with mouse movements up and down in the yellow box!</p>
         <button type="button" class="startGame" id="startGame" value="" onclick="startGame()">Start Game for 10 <img class="tokenicon" src="{{ site.baseurl }}/images/AJToken_60x60.png"></button>
+    </div>
+    <div id="endScreen">
+        <p id='endText'></p>
+        <button type="button" class="startGame" id='tryAgain' value="" onclick="location.reload()">Play Again</button>
     </div>
     <canvas id="pong" width="600" height="400"></canvas>
 </div>
 <script>
+function getTokens() {
+    const id = localStorage.getItem('currentUser');
+    fetch('https://ajarcade.duckdns.org/api/players/')
+        .then(response => {
+            // trap error response from Web API
+            if (response.status !== 200) {
+                const message = 'Fetch error: ' + response.status + " " + response.statusText;
+                alert(message);
+                return;
+            }
+            // Valid response will contain json data
+            response.json().then(data => {
+                // iterate through the whole database and find a record that matches the uid
+                for (i in data) {
+                    if (data[i].uid == id) {
+                        localStorage.setItem('tokenAmt', data[i].tokens);
+                    }
+                }
+            })
+        })
+}
+// removes 'amt' tokens from the user's tokens attribute
+function remTokens(amt) {
+    const id = localStorage.getItem('currentUser');
+    // update the user's token amount
+    getTokens();
+    var tokenAmt = localStorage.getItem('tokenAmt');
+    newAmt = tokenAmt-amt;
+    fetch('https://ajarcade.duckdns.org/api/players/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "uid": id,
+            "data": {"tokens": newAmt}
+        })
+    })
+        .then(res => {
+            return res.json()
+        })
+        .then(data => console.log(data))
+    setTimeout(function() {
+        getTokens();
+    }, 500);
+}
+// adds 'score' tokens to the user's tokens attribute (called after the game is over)
+function addTokens(amt) {
+    const id = localStorage.getItem('currentUser');
+    // update the user's token amount
+    getTokens();
+    tokenAmt = localStorage.getItem('tokenAmt');
+    newAmt = parseFloat(tokenAmt) + parseFloat(amt);
+    fetch('https://ajarcade.duckdns.org/api/players/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "uid": id,
+            "data": {"tokens": newAmt}
+        })
+        }).then(res => {
+        return res.json()
+        })
+        .then(data => console.log(data))
+    setTimeout(function() {
+        getTokens();
+    }, 500);
+}
 // select canvas element
 const canvas = document.getElementById("pong");
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
@@ -183,15 +269,29 @@ function collision(b,p){
 }
 // update function, the function that does all calculations
 function update(){
+    localStorage.setItem('pongStatus', null)
     // change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
     if( ball.x - ball.radius < 0 ){
         com.score++;
         comScore.play();
         resetBall();
-    }else if( ball.x + ball.radius > canvas.width){
+        if (com.score > 6) {
+            localStorage.setItem('pongStatus', 'false');
+        }
+        else {
+            localStorage.setItem('pongStatus', null);
+        }
+    }
+    else if( ball.x + ball.radius > canvas.width){
         user.score++;
         userScore.play();
         resetBall();
+        if (user.score > 6) {
+            localStorage.setItem('pongStatus', 'true');
+        }
+        else {
+            localStorage.setItem('pongStatus', null);
+        }
     }
     // the ball has a velocity
     ball.x += ball.velocityX;
@@ -245,23 +345,39 @@ function render(){
     // draw the ball
     drawArc(ball.x, ball.y, ball.radius, ball.color);
 }
-function game(){
-    update();
-    render();
-}
 // number of frames per second
 let framePerSecond = 50;
 //Hide start screen and call the game function 50 times every 1 Sec
+var loop = null
 function startGame() {
-    let div = document.getElementById('startScreen');
-    div.classList.add('animater');
-    let loop = setInterval(game,1000/framePerSecond);
+    let div = document.getElementById('startScreen')
+    div.classList.add('animater')
+    loop = setInterval(game,1000/framePerSecond)
+    getTokens()
+    remTokens(10)
     setTimeout(function() {
         div.style.display = "none";
         div.classList.remove("animater");
     }, 500);
 }
-
+function game(){
+    update();
+    render();
+    const endscreen = document.getElementById('endScreen');
+    const endtext = document.getElementById('endText');
+    if (localStorage.getItem('pongStatus') === 'true') {
+        clearInterval(loop)
+        addTokens(25)
+        getTokens()
+        endscreen.style.display = 'block'
+        endtext.innerHTML = 'You won! :) <br> Congrats on earning 15 tokens!'
+    }
+    if (localStorage.getItem('pongStatus') === 'false') {
+        clearInterval(loop)
+        endscreen.style.display = 'block'
+        endtext.innerHTML = 'You lost :( <br> 10 tokens down the drain';
+    }
+}
 </script>
 </body>
 </html>
