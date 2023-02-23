@@ -90,7 +90,7 @@
       <button id="enter" type="button" onclick='login()'>Enter</button>
       <p id="noWork"><p>
       <div class="noacc">
-       <p id="dontacc">Don't have an account?</p>
+        <p id="dontacc">Don't have an account?</p>
       </div>
       <button id="signup" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/login/signup';">Sign up</button>
 <script>
@@ -107,7 +107,7 @@
           "uid": userid.value,
           "password": pswrd.value
       })  
-      })
+    })
       .then(res => {
         // trap error response from Web API
         if (res.status !== 200) {
