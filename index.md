@@ -72,11 +72,14 @@
           text-align: center;
           margin-bottom: 0%;          
         }
+        #noWork {
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+          text-align: center;
+          font-size: 20px;
+          color: #ff2929;
+        }
     </style>
-    
-
   </head>
-  <body>
     <h1 class="header">
       Log In
     </h1>
@@ -84,25 +87,54 @@
     <input type="password" class="login" id="pswd" placeholder="Password" required>
     <div>
     <br>
-      <button id="enter" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/account';">Enter</button>
+      <button id="enter" type="button" onclick='login()'>Enter</button>
+      <p id="noWork"><p>
       <div class="noacc">
        <p id="dontacc">Don't have an account?</p>
       </div>
       <button id="signup" type="button" onclick="window.location.href='{{ site.baseurl }}/arcade/login/signup';">Sign up</button>
-    </div>
-    
-  </body>
-  <script>
-      // Get the input field
-      var input = document.getElementById("pswd");
-      // Execute a function when the user presses a key on the keyboard
-      input.addEventListener("keypress", function(event) {
-        // If the user presses the "Enter" key on the keyboard
-        if (event.key === "Enter") {
-          event.preventDefault();
-          // Trigger the button element with a click
-          document.getElementById("enter").click();
+<script>
+  function login() {
+    userid = document.getElementById('usrnm');
+    pswrd = document.getElementById('pswd');
+    p = document.getElementById('noWork');
+    fetch('https://ajarcade.duckdns.org/api/players/authenticate', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          "uid": userid.value,
+          "password": pswrd.value
+      })  
+      })
+      .then(res => {
+        // trap error response from Web API
+        if (res.status !== 200) {
+          p.innerHTML = "Incorrect username and/or password. <br> If you don't have an account, you can sign up.";
+          userid.value = "";
+          pswrd.value = "";
+          return;
         }
-      });
-    </script>
-</html>
+        // Valid response will contain json data
+        res.json().then(data => {
+          localStorage.setItem("currentUser", data.uid);
+          console.log("Success! Welcome user: " + localStorage.getItem('currentUser') + ", name: " + data.name)
+        })
+      })
+    setTimeout(function() {
+      window.location.replace("https://azeem-khan1.github.io/TripleAJv3/arcade/account");
+    }, 400);
+  }
+  // Get the input field
+  var input = document.getElementById("pswd");
+  // Execute a function when the user presses a key on the keyboard
+  input.addEventListener("keypress", function(event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("enter").click();
+    }
+  });
+</script>

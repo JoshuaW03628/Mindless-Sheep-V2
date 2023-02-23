@@ -92,16 +92,18 @@
   </body>
   <script src="{{ site.baseurl }}/arcade/api.js"></script>
   <script>
-      // Get the input field
-      var input = document.getElementById("pswdv");
-      // Execute a function when the user presses a key on the keyboard
-      input.addEventListener("keypress", function(event) {
-        // If the user presses the "Enter" key on the keyboard
-        if (event.key === "Enter") {
-          event.preventDefault();
-          // Trigger the button element with a click
-          document.getElementById("enter").click();
-        }
-      });
+      // Get the input fields
+      var input = [document.getElementById("usrnm"), document.getElementById("name"), document.getElementById("pswd"), document.getElementById("pswdv")];
+      for (i in input) {
+        // Execute a function when the user presses a key on the keyboard
+        input[i].addEventListener("keypress", function(event) {
+          // If the user presses the "Enter" key on the keyboard
+          if (event.key === "Enter") {
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("enter").click();
+          }
+        });
+      }
     </script>
 </html>

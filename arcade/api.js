@@ -2,9 +2,6 @@ function signUp() {
     // clear all local data
     localStorage.clear();
     let userid = document.getElementById('usrnm').value;
-    // store uid locally to be able to access the user's info around the arcade
-    localStorage.setItem("currentUser", userid);
-    localStorage.setItem("tokenAmt", 20);
     let nm = document.getElementById('name').value;
     let pwd = document.getElementById('pswd').value;
     let pw2 = document.getElementById('pswdv').value;
@@ -34,12 +31,17 @@ function signUp() {
         let uidStatus = localStorage.getItem('uidStatus')
         console.log(uidStatus)
         // tells user if they have a duplicate uid
-        if (uidStatus != 'false') {
+        if (uidStatus === 'true') {
             console.log('activated')
             const field = document.getElementById('usrnm');
             field.value = "";
             field.setAttribute('placeholder', 'That username is taken');
             field.style.borderBottomColor = "red";
+        }
+        // idiot proofing the uid field
+        else if (userid === "") {
+            document.getElementById('usrnm').placeholder = "Please enter a username";
+            document.getElementById('usrnm').style.borderBottomColor = "red";
         }
         // idiot proofing the name field
         else if (nm === "") {
@@ -73,12 +75,17 @@ function signUp() {
                 }).then(res => {
                 return res.json()
                 })
-                .then(data => console.log(data))
+                .then(data => {
+                    // store uid locally to be able to access the user's info around the arcade
+                    localStorage.setItem("currentUser", data.uid)
+                    localStorage.setItem("tokenAmt", 20);
+                    console.log(localStorage.getItem('currentUser'))
+                    console.log(data)})
                 .catch(error => console.log('ERROR'))
             // redirecting to account page
             setTimeout(function() {
-                window.location.replace("../account");
-            }, 600);
+                window.location.replace("https://azeem-khan1.github.io/TripleAJv3/arcade/account");
+            }, 700);
         }
     }, 600);
 }
