@@ -23,7 +23,7 @@
             font-size: 20pt;
             margin-bottom: 25px;
         }
-        p {
+        p.bubbly {
             --width: 25%;
             --padding: 2%;
             --margin: calc((((100% - var(--width)) - 2*var(--padding))/2));
@@ -40,7 +40,7 @@
             background-color: #0000;
             transition-duration: 0.4s;
         }
-        .warning {
+        #warningText {
             --width: 70%;
             --padding: 2%;
             --margin: calc((((100% - var(--width)) - 2*var(--padding))/2));
@@ -57,7 +57,7 @@
             background-color: #302f2f;
             transition-duration: 0.4s;
         }
-        p:hover {
+        p.bubbly:hover {
             background-color: #1a1a1a;
         }
         .btn {
@@ -125,7 +125,7 @@
         .del {
             display: none;
             position: absolute;
-            top: 50%;
+            top: 53%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 500px;
@@ -137,7 +137,7 @@
         .change {
             display: none;
             position: absolute;
-            top: 50%;
+            top: 53%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 500px;
@@ -193,10 +193,86 @@
         .animater {
             animation: fadeOut 0.4s forwards;
         }
+        .alerts {
+          font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+          text-align: center;
+          font-size: 15px;
+          color: #ff2929;
+          width: 90%;
+          margin-left: 5%;
+          margin-right: 5%;
+        }
     </style>
     <script src="{{ site.baseurl }}/arcade/api.js">
     </script>
     <script>
+        function change() {
+            const alertid = document.getElementById('alert')
+            const userid = document.getElementById('userid')
+            const old = document.getElementById('old')
+            const newP = document.getElementById('new')
+            const newPv = document.getElementById('newv')
+        fetch('https://ajarcade.duckdns.org/api/players/authenticate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "uid": userid.value,
+                "password": old.value
+            })  
+        })
+            .then(res => {
+                // trap error response from Web API
+                if (res.status !== 200) {
+                alertid.style.color = "#ff2929";
+                alertid.innerHTML = "Invalid username and/or password. <br> Could not set new password."
+                userid.value = ""
+                old.value = ""
+                return;
+                }
+                // Valid response will contain json data
+                res.json().then(data => {
+                if (newP.value === "") {
+                    alertid.innerHTML = "Please enter a NEW password."
+                    newP.style.borderBottomColor = "red";
+                }
+                else if (old.value === newP.value){
+                    alertid.innerHTML = "New password cannot be the same as old password."
+                    newP.style.borderBottomColor = "red";
+                }
+                else if (newP.value != newPv.value) {
+                    alertid.innerHTML = "Your passwords do not match. <br> Please verify your new password."
+                    newPv.style.borderBottomColor = "red";
+                }
+                else {
+                    // posting to database
+                    fetch('https://ajarcade.duckdns.org/api/players/update', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "uid": userid.value,
+                            "data": {"password": newP.value}
+                        })
+                        })
+                        .then(res => {
+                        return res.json()
+                        })
+                        .then(data => {
+                            console.log(data)
+                            alertid.style.color = "#57ff47"
+                            alertid.innerHTML = "<b>Success!</b> Your new password is set. <br> Redirecting soon."
+                            })
+                        .catch(error => console.log('ERROR'))
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1600);
+                }
+                })
+            })
+        }
         function openFormDel() {
             form = document.getElementById("del")
             form.style.display = "block";
@@ -207,7 +283,7 @@
             form.style.display = "block";
             form.classList.add("animatef");
         }
-        function closeFormDel() { 
+        function closeForm() { 
             form = document.getElementById("del");
             form.classList.remove("animatef");
             form.classList.add("animater");
@@ -222,23 +298,51 @@
             }, 400);
         }
         function delAcc() {
-            let inp = document.getElementById('userid').value;
-            fetch('https://ajarcade.duckdns.org/api/players/delete', {
-                method: 'DELETE',
+            const alertid = document.getElementById('alert2');
+            const usr = document.getElementById('username');
+            const pswd = document.getElementById('pswd');
+            fetch('https://ajarcade.duckdns.org/api/players/authenticate', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "uid": inp
+                    "uid": usr.value,
+                    "password": pswd.value
                 })  
-                }).then(res => {
-                return res.json()
+            })
+                .then(res => {
+                    // trap error response from Web API
+                    if (res.status !== 200) {
+                    alertid.style.color = "#ff2929";
+                    alertid.innerHTML = "invalid username and/or password. <br> Could not delete account."
+                    usr.value = ""
+                    pswd.value = ""
+                    return;
+                    }
+                    // Valid response will contain json data
+                    res.json().then(data => {
+                            fetch('https://ajarcade.duckdns.org/api/players/delete', {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    "uid": usr.value
+                                })  
+                                }).then(res => {
+                                return res.json()
+                                })
+                                .then(data => {
+                                    alertid.style.color = "#57ff47"
+                                    alertid.innerHTML = "<b>Success!</b> Your account has been deleted. <br> Redirecting soon."
+                                    })
+                                .catch(error => console.log('ERROR'))
+                            setTimeout(function() {
+                                window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
+                            }, 1700);
+                    })
                 })
-                .then(data => console.log(data))
-                .catch(error => console.log('ERROR'))
-            setTimeout(function() {
-                window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
-            }, 200);
         }
     </script>  
 </head>
@@ -246,28 +350,32 @@
     <div class="wrapper2">
         <h1>Account Information</h1>
         <h2 class="name">Name</h2>
-        <p id="nameFull"></p>
+        <p class='bubbly' id="nameFull"></p>
         <h2 class="uid">User ID</h2>
-        <p id="usernameID"></p>
+        <p class='bubbly' id="usernameID"></p>
         <button class="cancel" onclick="openFormPwd()">Change Password</button>
         <button class="btn" onclick="openFormDel()">Delete Account</button>
         <div class="del" id="del">
             <form class="form-container">
                 <h2>Delete Account</h2>
-                <input type="text" id="userid" placeholder="Please enter your User ID" required>
-                <p class="warning"><b>WARNING!</b> By clicking `delete`, you are removing your account from our system. Your tokens will NOT be saved and cannot be replenished!</p>
+                <input type="username" id="username" placeholder="Please enter your username" required>
+                <input type="password" id="pswd" placeholder="Please enter your password" required>
+                <p class="bubbly" id="warningText"><b>WARNING!</b> By clicking 'delete', you are removing your account from our system. Your tokens will NOT be saved and cannot be replenished!</p>
                 <button type="button" class="btn delbtn" onclick="delAcc()">Delete</button>
-                <button type="button" class="cancel" onclick="closeFormDel()">Cancel</button>
+                <p class="alerts" id="alert2"></p>
+                <button type="button" class="cancel" onclick="closeForm()">Cancel</button>
             </form>
         </div>
         <div class="change" id="changepwd">
             <form class="form-container">
                 <h2>Change Password</h2>
-                <input type="password" placeholder="Please enter your old password" required>
-                <input type="password" placeholder="Please enter your new password" required>
-                <input type="password" placeholder="Please re-enter your new password" required>
-                <button type="button" class="gbtn btn" onclick="putPWD()">Update Password</button>
-                <button type="button" class="cancel" onclick="closeFormDel()">Cancel</button>
+                <input type="username" id="userid" placeholder="Please enter your USERNAME" required>
+                <input type="password" id="old" placeholder="Please enter your OLD password" required>
+                <input type="password" id="new" placeholder="Please enter your NEW password" required>
+                <input type="password" id="newv" placeholder="Please re-enter your NEW password" required>
+                <button type="button" class="gbtn btn" onclick="change()">Update Password</button>
+                <p class="alerts" id="alert"></p>
+                <button type="button" class="cancel" onclick="closeForm()">Cancel</button>
             </form>
         </div>
     </div>
