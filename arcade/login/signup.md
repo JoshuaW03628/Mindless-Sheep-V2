@@ -15,9 +15,9 @@
           font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
           margin-top: 5%;
           position: inline;
-          width: 50%;
-          margin-left: 25%;
-          margin-right: 30%;
+          width: 65%;
+          margin-left: 17.5%;
+          margin-right: 17.5%;
           padding: 2%;
           font-size: 25px;
           background-color: #242424;
@@ -78,7 +78,7 @@
   <body>
     <h1 class="header">Sign Up</h1>
     <input type="" class="login" id="usrnm" placeholder="Username" required>
-    <input type="" class="login" id="name" placeholder="Full Name" required>
+    <input type="" class="login" id="name" placeholder="Full Name (will be displayed publicly)" required>
     <input type="password" class="login" id="pswd" placeholder="Password" required>
     <input type="password" class="login" id="pswdv" placeholder="Re-type Password" required>
     <div>

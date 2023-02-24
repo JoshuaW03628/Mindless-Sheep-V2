@@ -3,7 +3,7 @@
 <html>
 <title>Leaderboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<body>
+<body onload='sort()'>
 
 <style>
   * {
@@ -15,18 +15,39 @@
     margin-top: 40px;
   }
   table.board {
+    font-size: 13pt;
+    border-collapse: collapse;
+    margin: 25px 0;
     margin-top: 40px;
-    border: 2px solid #f1cc0c;
+    width: 90%;
     height: 50%;
   }
-  .board tr {
-    padding-top: 15px;
+  .board thead tr {
+    font-size: 16pt;
+    font-weight: bold;
+    background-color: #f1cc0c;
+    color: #000000;
+    text-align: left;
+  }
+  .board td {
+    text-align: center;
+    padding: 12px 15px;
     border: none;
     height: 50px;
   }
-  #container tr:nth-child(even){background-color: #373801;} {
-    padding-top: 12px;
-    padding-bottom: 12px;
+  .board tbody tr {
+    border: none;
+    transition-duration: 0.3s;
+  }
+  .board tbody tr:nth-of-type(even) {
+    background-color: #333333;
+  }
+  .board tbody tr:last-of-type {
+    border-bottom: 5px solid #f1cc0c;
+  }
+  .board tbody tr:hover {
+    color: #f1cc0c;
+    background-color: #5c5c5c;
   }
   #container {
     display: flex;
@@ -47,45 +68,66 @@
   <h1>TripleAJ Leaderboard</h1>
 
   <table class="board">
-    <tr>
-      <th>Rank</th>
-      <th>Name</th>
-      <th>Tokens</th>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td>Azeem Khan</td>
-      <td>69</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Ahad Biabani</td>
-      <td>63</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Josh Williams</td>
-      <td>61</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Akshat Parikh</td>
-      <td>55</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Samit Poojary</td>
-      <td>52</td>
-    </tr>
-  </table>
-  <p id="dots">. . .</p>
-  <table class="board">
-    <tr>
-      <td>21</td>
-      <td>Willy Wonka</td>
-      <td>23</td>
-    </tr>
+    <thead>
+      <td>Rank</td>
+      <td>Name</td>
+      <td>Tokens</td>
+    </thead>
+    <tbody id='tbody'></tbody>
   </table>
 </div>
 </body>
+
+<script>
+var tbody = document.getElementById('tbody');
+let unsortedDB = null;
+let sortedDB = null;
+function tableFill(db) {
+  let len = db.length
+  for (var i = 0; i < len; i++) {
+    // save relevant info from db
+    var rank = i+1
+    var name = db[i].name
+    var tokens = db[i].tokens
+    // Make a new row
+    let tr = document.createElement('tr')
+    tbody.appendChild(tr)
+    // Make three entries for the row
+    let tdR = document.createElement('td')
+    let tdN = document.createElement('td')
+    let tdT = document.createElement('td')
+    // Make text node for each entry (contains data from db)
+    let rankNode = document.createTextNode(parseFloat(rank))
+    let nameNode = document.createTextNode(name)
+    let tokensNode = document.createTextNode(parseFloat(tokens))
+    // Make text nodes visible in row entries
+    tdR.appendChild(rankNode)
+    tdN.appendChild(nameNode)
+    tdT.appendChild(tokensNode)
+    // Make row entries visible in the row
+    tr.appendChild(tdR)
+    tr.appendChild(tdN)
+    tr.appendChild(tdT)
+  }
+}
+async function sort() {
+  const unsorted = await fetch('https://ajarcade.duckdns.org/api/players/')
+    .then(res => {return res.json()})
+    .then(data => {unsortedDB = data})
+    .catch(error => console.log('ERROR'))
+  // Check to see if fetch worked
+  console.log(unsortedDB)
+  // sorts the db by token amount
+  sortedDB = unsortedDB.sort((a, b) => {
+    if (a.tokens > b.tokens) {
+      return -1;
+    }
+  });
+  // Log the sorted db
+  console.log(sortedDB)
+  // fill the table with sorted db info
+  tableFill(sortedDB)
+}
+
+</script>
 </html>
