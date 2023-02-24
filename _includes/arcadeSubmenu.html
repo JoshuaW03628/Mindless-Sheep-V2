@@ -1,3 +1,4 @@
+<div id="popup"></div>
 <table style="margin-top: -30px;">
     <tr style="text-align: center; vertical-align: middle;">
         <td><a href="{{ site.baseurl }}/" onclick="localStorage.clear()">Log Out</a></td>
@@ -10,9 +11,32 @@
         <td><span id="tokenCount">loading...</span> <img src="{{ site.baseurl }}/images/AJToken_60x60.png" style="display: inline; width: 18px; vertical-align:middle;"></td>
     </tr>
 </table>
+<style>
+    .popup {
+        padding: auto;
+        margin: auto;
+        text-align: center;
+        position: absolute;
+        top: -6vh;
+        left: 0vw;
+        width: 100%;
+        height: 99vh;
+        background-color: black;
+        z-index: 999;
+    }
+    #text {
+        color: #f1cc0c;
+        font-size: 32pt;
+        position: relative;
+        padding: 50px;
+        height: 40vh;
+        margin-top: 25vh;
+    }
+</style>
 <script>
+    var updateLoop = null;
     // function that updates the token amount (database implementation needed)
-    function tokenDisp() {
+    async function tokenDisp() {
         // identify where the tokens must be displayed
         let elem = document.getElementById('tokenCount');
 
@@ -20,7 +44,7 @@
         let currentUser = localStorage.getItem('currentUser');
 
         // Read the database
-        fetch('https://ajarcade.duckdns.org/api/players/')
+        await fetch('https://ajarcade.duckdns.org/api/players/')
             .then(response => {
                 // trap error response from Web API
                 if (response.status !== 200) {
@@ -36,21 +60,55 @@
                             const tokenAmt = data[i].tokens;
                             const tokenAmtA = Math.abs(tokenAmt);
                             if (tokenAmt > 0) {
+                                localStorage.setItem('broke', 'no')
                                 elem.textContent = tokenAmt;
                             }
                             else if (tokenAmt < 0) {
+                                localStorage.setItem('broke', 'yes')
                                 elem.textContent = "In debt " + tokenAmtA;
                             }
                             else {
+                                localStorage.setItem('broke', 'yes')
                                 elem.textContent = "You're broke";
                             }
                         }
                     }
                 })
             })
+        // deals with what happens when the user runs out of tokens
+        if (localStorage.getItem('broke') === 'yes') {
+            clearInterval(updateLoop);
+            popup = document.getElementById('popup');
+            popup.classList.add('popup');
+            const p = document.createElement('p');
+            p.setAttribute('id', 'text');
+            p.innerHTML = 'You have ran out of tokens. <br><br> Thanks for playing at the TripleAJ Arcade! <br><br> Automatically deleting account in 10 seconds.';
+            popup.appendChild(p);
+            setTimeout(function() {
+            fetch('https://ajarcade.duckdns.org/api/players/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "uid": localStorage.getItem('currentUser')
+                })  
+                }).then(res => {
+                return res.json()
+                })
+                .then(data => console.log(data))
+                .catch(error => console.log('ERROR'))
+                localStorage.clear()
+                setTimeout(function() {
+                    window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
+                }, 600);
+            }, 10000);
+        }
     };
+    
+
 
     // update the token amount every 'x' seconds
-    let x = 1;
-    const updateLoop = setInterval("tokenDisp()", (x*1000))
+    let x = 0.5;
+    updateLoop = setInterval("tokenDisp()", (x*1000))
 </script>
