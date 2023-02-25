@@ -278,6 +278,10 @@ li {
 
 </style>
 <script>
+
+var up = new Audio('imgs/ding.mp3')
+var down = new Audio('sounds/wall.mp3')
+var good = new Audio('sounds/userScore.mp3')
     // updates local storage with accurate token amount based upon which user is signed in
     function getTokens() {
         const id = localStorage.getItem('currentUser');
@@ -393,11 +397,14 @@ function guessNum() {
   var numIn = document.getElementById("numInput").value;
   if (numIn > theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-down";
+    down.play();
   } else if (numIn < theNum) {
     document.getElementById("theIcon").className = "fas fa-arrow-up";
+    up.play();
   } else if (numIn == theNum) {
     addTokens(tokens)
     document.getElementById("theIcon").className = "fas fa-check-circle";
+    good.play();
     document.getElementById("theGuessing").style.display = "none";
     document.getElementById("correctNum").innerHTML = theNum;
     document.getElementById("guessssses").style.display = "none";

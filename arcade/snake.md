@@ -17,8 +17,10 @@
     </div>
     <div id="endScreen">
         <h2>Game Over</h2>
+        <p class='endText' id='endText'>You scored <span id='endScore' style='color: #f1cc0c;'></span>.<br><br>That's a net profit of <span id='endTokens' style='color: #f1cc0c;'></span> Tokens!</p>
         <button type="button" class="tryAgain" id="restart" value="" onclick="tryAgain()">Try Again</button>
     </div>
+    <p id='score'>Score: <span id='scoreText' style='color: #f1cc0c'>0</span></p>
     <canvas id="board"></canvas>
 </div>
 </body>
@@ -34,12 +36,21 @@
         width: 94%;
         text-align: center;
     }
+    p.endText {
+        font-size: 18pt;
+        padding: 20px;
+        text-align: center;
+    }
+    #score {
+        padding: 10px;
+        font-size: 20pt;
+    }
     #startScreen {
         font-size: 16pt;
         position: absolute;
         width: 80%;
-        height: 400px;
-        background-color: #302f2f;
+        height: 500px;
+        background-color: #202020;
         border-radius: 20px;
         padding: 10%;
         z-index: 99;
@@ -49,8 +60,8 @@
         font-size: 16pt;
         position: absolute;
         width: 80%;
-        height: 400px;
-        background-color: #302f2f;
+        height: 500px;
+        background-color: #202020;
         border-radius: 20px;
         padding: 10%;
         z-index: 98;
@@ -61,7 +72,7 @@
         margin-bottom: 30px;
     }
     h2 {
-        font-size: 24pt;
+        font-size: 26pt;
         text-align: center;
         margin-bottom: 30px;
     }
@@ -75,7 +86,7 @@
         margin-left: 20%;
         margin-right: 20%;
         height: 100px;
-        margin-top: 100px;
+        margin-top: 150px;
         margin-bottom: 200px;
         border-radius: 8px;
         background-color: #302f2f;
@@ -97,7 +108,7 @@
         margin-left: 20%;
         margin-right: 20%;
         height: 100px;
-        margin-top: 100px;
+        margin-top: 80px;
         margin-bottom: 200px;
         border-radius: 8px;
         background-color: #302f2f;
@@ -139,8 +150,56 @@
 </style>
 
 <script>
+
+// removes 'amt' tokens from the user's tokens attribute
+function remTokens(amt) {
+    const id = localStorage.getItem('currentUser');
+    // update the user's token amount
+    var tokenAmt = localStorage.getItem('tokenAmt');
+    newAmt = tokenAmt-amt;
+    fetch('https://ajarcade.duckdns.org/api/players/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "uid": id,
+            "data": {"tokens": newAmt}
+        })
+    })
+        .then(res => {
+            return res.json()
+        })
+        .then(data => console.log(data))
+}
+
+
+// adds 'amt' tokens to the user's tokens attribute (called after the game is over)
+function addTokens(amt) {
+    const id = localStorage.getItem('currentUser');
+    // update the user's token amount
+    tokenAmt = localStorage.getItem('tokenAmt');
+    newAmt = parseFloat(tokenAmt) + parseFloat(amt);
+    fetch('https://ajarcade.duckdns.org/api/players/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "uid": id,
+            "data": {"tokens": newAmt}
+        })
+        }).then(res => {
+        return res.json()
+        })
+        .then(data => console.log(data))
+}
+
+
+
 //remove start screen
 function startGame() {
+    remTokens(10);
     let div = document.getElementById('startScreen');
     div.classList.add('animater');
     setTimeout(function() {
@@ -149,7 +208,11 @@ function startGame() {
     }, 500);
 }
 
+// Tells the game what to do when the game ends
 function endGame() {
+    addTokens(score);
+    document.getElementById('endScore').textContent = score;
+    document.getElementById('endTokens').textContent = score-10;
     let div = document.getElementById('endScreen');
     div.style.display = "block";
     div.classList.add('animatef');
@@ -159,20 +222,9 @@ function endGame() {
     }, 200);
 }
 
+// reloads the page when the try again button is pressed
 function tryAgain() {
-    startscreen = document.getElementById('startScreen');
-    endscreen = document.getElementById('endScreen');
-    endscreen.classList.add('animater')
-    setTimeout(function() {
-        endscreen.style.display = "none";
-        endscreen.classList.remove("animater");
-    }, 500);
-    startscreen.style.display = "block";
-    startscreen.classList.add('animatef')
-    setTimeout(function() {
-        startscreen.style.display = "block";
-        startscreen.classList.remove("animatef");
-    }, 200);
+    location.reload()
 }
 
 
@@ -194,7 +246,8 @@ var velocityY = 0;
 
 var snakeBody = [];
 
-
+// game sound
+var hit = new Audio("sounds/hit.mp3");
 
 //food
 var foodX;
@@ -202,7 +255,9 @@ var foodY;
 
 var gameOver = false;
 
+// score
 
+var score = 0
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -218,9 +273,6 @@ window.onload = function() {
 }
 
 
-
-
-
 function update() {
     if (gameOver) {
         return;
@@ -233,6 +285,9 @@ function update() {
 
     if (snakeX == foodX && snakeY == foodY) {
         snakeBody.push([foodX, foodY])
+        hit.play();
+        score++;
+        document.getElementById('scoreText').textContent = score;
         placeFood();
     }
 
@@ -264,8 +319,8 @@ function update() {
             endGame()
         }
     }
-
 }
+
 
 function changeDirection(e) {
     if (e.code == "ArrowUp" && velocityY != 1) {
@@ -290,8 +345,5 @@ function changeDirection(e) {
 
 function placeFood() {
     foodX = Math.floor(Math.random() * cols) * blockSize;
-    foodY = Math.floor(Math.random() * rows) * blockSize;
-
-
- 
+    foodY = Math.floor(Math.random() * rows) * blockSize; 
 }
