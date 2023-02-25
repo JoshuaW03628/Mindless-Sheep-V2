@@ -79,9 +79,9 @@
                                 popup.classList.add('popup');
                                 const p = document.createElement('p');
                                 p.setAttribute('id', 'text');
-                                let ran = randomNum(options.length);
-                                let option = options[ran];
-                                p.innerHTML = option;
+                                let n = randomNum(options.length);
+                                let toxt = options[n];
+                                p.innerHTML = toxt;
                                 popup.appendChild(p);
                                 setTimeout(function() {
                                     fetch('https://ajarcade.duckdns.org/api/players/delete', {
