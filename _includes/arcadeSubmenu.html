@@ -34,6 +34,15 @@
     }
 </style>
 <script>
+    function randomNum(num) {
+        return Math.floor(Math.random() * num);
+    }
+    const options = ['You have ran out of tokens. <br><br> Thanks for playing at the TripleAJ Arcade! <br><br> Automatically deleting account in 10 seconds.',
+                    'You are now either broke or in debt. <br><br> Congrats! Now get out. <br><br> Automatically deleting account in 10 seconds.',
+                    'Way to go! You ran out of tokens. <br><br> How does it feel to be at the bottom of the leaderboard? <br><br> Automatically deleting account in 10 seconds.',
+                    'You have spent all your tokens. You gotta chill with that, man. <br><br> Once you get a hold on life, you can come back. <br><br> Automatically deleting account in 10 seconds.',
+                    'Congrats, you are broke. <br><br> We are gonna have to kick you out :( <br><br> Automatically deleting account in 10 seconds.'
+                    ]
     var updateLoop = null;
     // function that updates the token amount (database implementation needed)
     async function tokenDisp() {
@@ -58,57 +67,50 @@
                     for (i in data) {
                         if (data[i].uid == currentUser) {
                             const tokenAmt = data[i].tokens;
+                            localStorage.setItem('tokenAmt', tokenAmt);
                             const tokenAmtA = Math.abs(tokenAmt);
                             if (tokenAmt > 0) {
-                                localStorage.setItem('broke', 'no')
                                 elem.textContent = tokenAmt;
                             }
-                            else if (tokenAmt < 0) {
-                                localStorage.setItem('broke', 'yes')
-                                elem.textContent = "In debt " + tokenAmtA;
-                            }
                             else {
-                                localStorage.setItem('broke', 'yes')
-                                elem.textContent = "You're broke";
+                                elem.textContent = "In debt " + tokenAmtA;
+                                clearInterval(updateLoop);
+                                const popup = document.getElementById('popup');
+                                popup.classList.add('popup');
+                                const p = document.createElement('p');
+                                p.setAttribute('id', 'text');
+                                let ran = randomNum(options.length);
+                                let option = options[ran];
+                                p.innerHTML = option;
+                                popup.appendChild(p);
+                                setTimeout(function() {
+                                    fetch('https://ajarcade.duckdns.org/api/players/delete', {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            "uid": localStorage.getItem('currentUser')
+                                        })  
+                                        }).then(res => {
+                                        return res.json()
+                                        })
+                                        .then(data => console.log(data))
+                                        .catch(error => console.log('ERROR'))
+                                        localStorage.clear()
+                                        setTimeout(function() {
+                                            window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
+                                        }, 600);
+                                }, 10000);
                             }
                         }
                     }
                 })
             })
-        // deals with what happens when the user runs out of tokens
-        if (localStorage.getItem('broke') === 'yes') {
-            clearInterval(updateLoop);
-            popup = document.getElementById('popup');
-            popup.classList.add('popup');
-            const p = document.createElement('p');
-            p.setAttribute('id', 'text');
-            p.innerHTML = 'You have ran out of tokens. <br><br> Thanks for playing at the TripleAJ Arcade! <br><br> Automatically deleting account in 10 seconds.';
-            popup.appendChild(p);
-            setTimeout(function() {
-            fetch('https://ajarcade.duckdns.org/api/players/delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "uid": localStorage.getItem('currentUser')
-                })  
-                }).then(res => {
-                return res.json()
-                })
-                .then(data => console.log(data))
-                .catch(error => console.log('ERROR'))
-                localStorage.clear()
-                setTimeout(function() {
-                    window.location.replace("https://azeem-khan1.github.io/TripleAJv3/");
-                }, 600);
-            }, 10000);
-        }
     };
-    
-
 
     // update the token amount every 'x' seconds
     let x = 0.5;
-    updateLoop = setInterval("tokenDisp()", (x*1000))
+    updateLoop = setInterval("tokenDisp()", (x*1000));
+
 </script>
