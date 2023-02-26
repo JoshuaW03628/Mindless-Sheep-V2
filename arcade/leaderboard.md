@@ -23,7 +23,7 @@
     height: 50%;
   }
   .board thead tr {
-    font-size: 16pt;
+    font-size: 17pt;
     font-weight: bold;
     background-color: #f1cc0c;
     color: #000000;
@@ -41,6 +41,18 @@
   }
   .board tbody tr:nth-of-type(even) {
     background-color: #333333;
+  }
+  .board tbody tr:nth-child(1) {
+    background-color: #ffb300;
+    color: black;
+  }
+  .board tbody tr:nth-child(2) {
+    background-color: #c0c0c0;
+    color: black;
+  }
+  .board tbody tr:nth-child(3) {
+    background-color: #cd7f32;
+    color: white;
   }
   .board tbody tr:last-of-type {
     border-bottom: 5px solid #f1cc0c;
