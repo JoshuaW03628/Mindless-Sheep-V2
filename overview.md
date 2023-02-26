@@ -1,11 +1,12 @@
 {% include home.html %}
 # Overview
 
-This site is created with [Mr. Mortensen's template](https://github.com/jm1021/leuck_reunion) and deployed using Github Pages and Jekyll.
+The TripleAJ Arcade is a virtual arcade with inbuilt currency. Users can sign up for free and start off with 30 tokens. They will pay tokens to play several digital arcade games and will earn tokens upon victory/score. User's will also be able to view a live leaderboard based on number of tokens. Account customization includes the ability to enter a user's full name -to display on the leaderboard- and change their password, which updates the corresponding record in our database. Our entire backend is built in Python on a Flask framework, which is deployed using AWS and Docker.
 
-The purpose of this site is to brainstorm, develop, and host the Create Performance Task for team TripleAJ.
+> Find team member pages above (used for brainstorming), along with our agile manifesto.
 
-> Find team member pages above, along with the grading rubric applied to our project and our agile manifesto.
+
+
 
 ## Team Members
 
