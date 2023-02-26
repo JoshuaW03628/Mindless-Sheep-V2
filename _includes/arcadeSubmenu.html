@@ -80,7 +80,10 @@
                                 const p = document.createElement('p');
                                 p.setAttribute('id', 'text');
                                 let n = randomNum(options.length);
+                                console.log(options.length)
+                                console.log(n)
                                 let toxt = options[n];
+                                console.log(toxt);
                                 p.innerHTML = toxt;
                                 popup.appendChild(p);
                                 setTimeout(function() {
