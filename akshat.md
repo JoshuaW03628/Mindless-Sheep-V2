@@ -5,7 +5,7 @@
 
 > My database would include a user's name, UID, password, and high score. We are also going to include the current when the user finishes playing the game. 
 
-> We could also add low scores, but that would mainly consists of 0s. Also, as a backend I would have to ensure if any API's are used so that our data can be efficiently used to create a leadership board. 
+> We could also add low scores, but that would mainly consists of 0s. Also, as a backend I would have to ensure if any API's are used so that our data can be efficiently used to create a leadership board. This is needed.
 
 > Here is a sample database for our app: 
 
