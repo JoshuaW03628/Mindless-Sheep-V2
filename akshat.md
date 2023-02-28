@@ -32,3 +32,11 @@ We could also add low scores, but that would mainly consists of 0s. Also, as a b
 UPDATE 808: WE are going to use this for idiot proofing backend 
 
 We might start running ads as well. But our backend consists of a functioning token system. We also have a functioning login system.
+
+We might also even add a signup page.
+
+We could even add end and start screen for our games:
+- Pong
+- Hi-Lo
+- Snake
+- ReactionTime
