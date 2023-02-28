@@ -26,3 +26,7 @@
 
 ![code 1](/images/input45.png)
 ![code 2](/images/output44.png)
+
+We could also add low scores, but that would mainly consists of 0s. Also, as a backend I would have to ensure if any API's are used so that our data We could also add low scores, but that would mainly consists of 0s. Also, as a backend I would have to ensure if any API's are used so that our data 
+
+UPDATE 808: WE are going to use this for idiot proofing backend 
